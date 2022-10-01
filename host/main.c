@@ -942,12 +942,17 @@ void terminate_tee_session()
 int main(int argc, char **argv)
 {
 
-    printf("Prepare session with the TA\n");
+    // printf("Prepare session with the TA\n");
+    printf("TAセッションの準備開始\n");
     prepare_tee_session();
+    printf("セッション成功\n");
 
-    printf("Begin darknet\n");
+    // printf("Begin darknet\n");
+    printf("Darknet開始\n");
     darknet_main(argc, argv);
 
+    printf("終了セッション開始\n");
     terminate_tee_session();
+    printf("終了\n");
     return 0;
 }

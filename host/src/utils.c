@@ -131,8 +131,9 @@ int find_arg(int argc, char* argv[], char *arg)
 }
 
 int find_int_arg(int argc, char **argv, char *arg, int def)
-{
+{printf("in h/src/utils.c//find_int_arg\n");
     int i;
+    printf("オプション:%s の引数を確認開始...", arg);
     for(i = 0; i < argc-1; ++i){
         if(!argv[i]) continue;
         if(0==strcmp(argv[i], arg)){
@@ -142,6 +143,7 @@ int find_int_arg(int argc, char **argv, char *arg, int def)
             break;
         }
     }
+    printf("オプション:%s の引数は %d\n", arg, def);
     return def;
 }
 
@@ -333,11 +335,16 @@ void free_ptrs(void **ptrs, int n)
 }
 
 char *fgetl(FILE *fp)
-{
-    if(feof(fp)) return 0;
+{printf("in h/src/utils.c//fgetl    ");
+    //feof: file end of file ファイルの終端指示詞検知
+    if(feof(fp)) {
+      printf("fp: %sは終端になりました\n", *fp);
+      return 0;
+    }
     size_t size = 512;
     char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
+    if(!fgets(line, size, fp)){ // fgets(戻り値の戻り先, 読み込む文字列のサイズ, 読み込みファイル): file get string
+        printf("文字が読み込めなかった または EOF です\n");
         free(line);
         return 0;
     }
@@ -359,7 +366,7 @@ char *fgetl(FILE *fp)
         curr = strlen(line);
     }
     if(line[curr-1] == '\n') line[curr-1] = '\0';
-
+    printf("line: %s\n", line);
     return line;
 }
 

@@ -797,12 +797,17 @@ int is_network(section *s)
 }
 
 network *parse_network_cfg(char *filename)
-{
+{printf("in h/src/parser.c//parse_network_cfg\n");
+    // cfg/mnist_lenet.cfgを読んでいるハズ
+    printf("will read: %s\n", filename);
     list *sections = read_cfg(filename);
+    printf("読み込んだファイルの大項目数 size:%d\n", sections->size);
     node *n = sections->front;
     if(!n) error("Config file has no sections");
+    printf("ネットワークの作成\n");
     network *net = make_network(sections->size - 1);
 
+    printf("ここまで整理した(したい(できてない(悲しい)))\n");
     net->gpu_index = gpu_index;
     size_params params;
 
@@ -968,7 +973,7 @@ network *parse_network_cfg(char *filename)
 }
 
 list *read_cfg(char *filename)
-{
+{printf("in h/src/parser.c//read_cfg\n");
     FILE *file = fopen(filename, "r");
     if(file == 0) file_error(filename);
     char *line;

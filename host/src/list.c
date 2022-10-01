@@ -3,12 +3,13 @@
 #include "list.h"
 
 list *make_list()
-{
-	list *l = malloc(sizeof(list));
-	l->size = 0;
-	l->front = 0;
-	l->back = 0;
-	return l;
+{printf("in h/src/list.c//make_list  ");
+    printf("list構造体の初期化\n");
+    list *l = malloc(sizeof(list));
+    l->size = 0;
+    l->front = 0;
+    l->back = 0;
+    return l;
 }
 
 /*
@@ -33,7 +34,7 @@ void *list_pop(list *l){
     if(l->back) l->back->next = 0;
     free(b);
     --l->size;
-    
+
     return val;
 }
 

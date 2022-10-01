@@ -59,9 +59,9 @@ load_args get_base_args(network *net)
 }
 
 network *load_network(char *cfg, char *weights, int clear)
-{
+{printf("in h/src/network.c//load_network\n");
+    printf("設定ファイルの読み込み %s\n", cfg);
     network *net = parse_network_cfg(cfg);
-
 
     if(weights && weights[0] != 0){
         load_weights(net, weights);
@@ -185,7 +185,8 @@ char *get_layer_string(LAYER_TYPE a)
 }
 
 network *make_network(int n)
-{
+{printf("in h/src/network.c//make_network\n");
+    printf("層分のメモリを確保(calloc)\n");
     network *net = calloc(1, sizeof(network));
     net->n = n;
     net->layers = calloc(net->n, sizeof(layer));

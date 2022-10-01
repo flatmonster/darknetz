@@ -399,14 +399,16 @@ void visualize(char *cfgfile, char *weightfile)
 }
 
 void darknet_main(int argc, char **argv)
-{
+{printf("in h/examples/darknet//darknet_main\n");
     //test_resize("data/bad.jpg");
     //test_box();
     //test_convolutional_layer();
     if(argc < 2){
-        fprintf(stderr, "usage: %s <function>\n", argv[0]);
+        // fprintf(stderr, "usage: %s <function>\n", argv[0]);
+        fprintf(stderr, "使い方: %s <function>\n", argv[0]);
         return 0;
     }
+    printf("gpuindexの決定\n");
     gpu_index = find_int_arg(argc, argv, "-i", 0);
     if(find_arg(argc, argv, "-nogpu")) {
         gpu_index = -1;
@@ -420,6 +422,7 @@ void darknet_main(int argc, char **argv)
     }
 #endif
 
+    printf("第1引数の判定(第1引数: %s)\n", argv[1]);
     if (0 == strcmp(argv[1], "average")){
         average(argc, argv);
     } else if (0 == strcmp(argv[1], "yolo")){
