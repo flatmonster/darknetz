@@ -211,7 +211,8 @@ convolutional_layer parse_convolutional(list *options, size_params params)
     int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
     int binary = option_find_int_quiet(options, "binary", 0);
     int xnor = option_find_int_quiet(options, "xnor", 0);
-
+    
+    //ここで第1層を作成
     convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam);
     layer.flipped = option_find_int_quiet(options, "flipped", 0);
     layer.dot = option_find_float_quiet(options, "dot", 0);
@@ -799,21 +800,22 @@ int is_network(section *s)
 network *parse_network_cfg(char *filename)
 {printf("in h/src/parser.c//parse_network_cfg\n");
     // cfg/mnist_lenet.cfgを読んでいるハズ
-    printf("will read: %s\n", filename);
+    printf("次のファイルを読み込み開始: %s\n", filename);
     list *sections = read_cfg(filename);
     printf("読み込んだファイルの大項目数 size:%d\n", sections->size);
     node *n = sections->front;
-    if(!n) error("Config file has no sections");
+    // if(!n) error("Config file has no sections");
+    if(!n) error("コンフィグファイルがセクションを持っていません");
     printf("ネットワークの作成\n");
     network *net = make_network(sections->size - 1);
 
     printf("ここまで整理した(したい(できてない(悲しい)))\n");
     net->gpu_index = gpu_index;
     size_params params;
-
     section *s = (section *)n->val;
     list *options = s->options;
-    if(!is_network(s)) error("First section must be [net] or [network]");
+    // if(!is_network(s)) error("First section must be [net] or [network]");
+    if(!is_network(s)) error("最初のセクションは [net] or [network] である必要があります\n");
     parse_net_options(options, net);
 
     params.h = net->h;
@@ -899,7 +901,8 @@ network *parse_network_cfg(char *filename)
             l.delta_gpu = net->layers[count-1].delta_gpu;
 #endif
         }else{
-            fprintf(stderr, "Type not recognized: %s\n", s->type);
+            // fprintf(stderr, "Type not recognized: %s\n", s->type);
+            fprintf(stderr, "型が認識できません: %s\n", s->type);
         }
         l.clip = net->clip;
         l.truth = option_find_int_quiet(options, "truth", 0);
