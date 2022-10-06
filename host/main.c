@@ -205,6 +205,7 @@ void update_net_agrv_CA(int cond, int workspace_size, float *workspace)
 }
 
 
+// conv層をここで作っている？
 void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam, int flipped, float dot)
 {
   TEEC_Operation op;

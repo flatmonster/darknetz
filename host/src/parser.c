@@ -211,14 +211,15 @@ convolutional_layer parse_convolutional(list *options, size_params params)
     int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
     int binary = option_find_int_quiet(options, "binary", 0);
     int xnor = option_find_int_quiet(options, "xnor", 0);
-    
     //ここで第1層を作成
+    // to ./convolutional_layer.c
     convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam);
     layer.flipped = option_find_int_quiet(options, "flipped", 0);
     layer.dot = option_find_float_quiet(options, "dot", 0);
 
-
+    /* パーティションポイント1 <= 現在層 < パーティションポイント2ならば */
     if(count_global > partition_point1 && count_global <= partition_point2){
+    // to ../main.c
     make_convolutional_layer_CA(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam, layer.flipped, layer.dot);
     }
 
@@ -798,22 +799,23 @@ int is_network(section *s)
 }
 
 network *parse_network_cfg(char *filename)
-{printf("in h/src/parser.c//parse_network_cfg\n");
+{
     // cfg/mnist_lenet.cfgを読んでいるハズ
     printf("次のファイルを読み込み開始: %s\n", filename);
     list *sections = read_cfg(filename);
-    printf("読み込んだファイルの大項目数 size:%d\n", sections->size);
     node *n = sections->front;
     // if(!n) error("Config file has no sections");
     if(!n) error("コンフィグファイルがセクションを持っていません");
     printf("ネットワークの作成\n");
+    //network ../include/darknet.h
     network *net = make_network(sections->size - 1);
 
-    printf("ここまで整理した(したい(できてない(悲しい)))\n");
     net->gpu_index = gpu_index;
     size_params params;
+
     section *s = (section *)n->val;
     list *options = s->options;
+    printf("読み込んだファイルのセクション数 size:%d\n", sections->size);
     // if(!is_network(s)) error("First section must be [net] or [network]");
     if(!is_network(s)) error("最初のセクションは [net] or [network] である必要があります\n");
     parse_net_options(options, net);
@@ -830,6 +832,7 @@ network *parse_network_cfg(char *filename)
     n = n->next;
     int count = 0;
     free_section(s);
+
     fprintf(stderr, "layer     filters    size              input                output\n");
 
     while(n){
@@ -943,6 +946,7 @@ network *parse_network_cfg(char *filename)
             params.inputs = l.outputs;
         }
     }
+    printf("層情報出力終了？\n");
 
     free_list(sections);
     layer out = get_network_output_layer(net);
@@ -976,7 +980,7 @@ network *parse_network_cfg(char *filename)
 }
 
 list *read_cfg(char *filename)
-{printf("in h/src/parser.c//read_cfg\n");
+{
     FILE *file = fopen(filename, "r");
     if(file == 0) file_error(filename);
     char *line;
