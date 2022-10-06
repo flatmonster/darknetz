@@ -185,7 +185,7 @@ char *get_layer_string(LAYER_TYPE a)
 }
 
 network *make_network(int n)
-{printf("in h/src/network.c//make_network\n");
+{//printf("in h/src/network.c//make_network\n");
     printf("層分のメモリを確保(calloc)\n");
     network *net = calloc(1, sizeof(network));
     net->n = n;

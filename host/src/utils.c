@@ -335,16 +335,16 @@ void free_ptrs(void **ptrs, int n)
 }
 
 char *fgetl(FILE *fp)
-{printf("in h/src/utils.c//fgetl    ");
+{//printf("in h/src/utils.c//fgetl    ");
     //feof: file end of file ファイルの終端指示詞検知
     if(feof(fp)) {
-      printf("fp: %sは終端になりました\n", *fp);
+      printf("読んでいるファイルは終端になりました\n", *fp);
       return 0;
     }
     size_t size = 512;
     char *line = malloc(size*sizeof(char));
     if(!fgets(line, size, fp)){ // fgets(戻り値の戻り先, 読み込む文字列のサイズ, 読み込みファイル): file get string
-        printf("文字が読み込めなかった または EOF です\n");
+        printf("読んでいるファイルの文字が読み込めなかった または EOF です\n");
         free(line);
         return 0;
     }

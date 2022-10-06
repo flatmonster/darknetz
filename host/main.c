@@ -208,6 +208,7 @@ void update_net_agrv_CA(int cond, int workspace_size, float *workspace)
 // conv層をここで作っている？
 void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam, int flipped, float dot)
 {
+  printf("do it \n");
   TEEC_Operation op;
   uint32_t origin;
   TEEC_Result res;
@@ -230,6 +231,9 @@ void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int grou
 
     float passflo = dot;
     char *acti = get_activation_string(activation);
+
+    printf("\n\n情報\n");
+    printf(" passint[0] = %d, passint[1] = %d, passint[2] = %d, passint[3] = %d, passint[4] = %d, passint[5] = %d, passint[6] = %d, passint[7] = %d, passint[8] = %d, passint[9] = %d, passint[10] =%d, passint[11] =%d, passint[12] =%d, passint[13] =%d \n", batch , h , w , c , n , groups , size , stride , padding , batch_normalize , binary , xnor , adam , flipped);
 
     memset(&op, 0, sizeof(op));
     op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_INPUT, TEEC_VALUE_INPUT,

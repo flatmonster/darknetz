@@ -217,10 +217,10 @@ convolutional_layer parse_convolutional(list *options, size_params params)
     layer.flipped = option_find_int_quiet(options, "flipped", 0);
     layer.dot = option_find_float_quiet(options, "dot", 0);
 
-    /* パーティションポイント1 <= 現在層 < パーティションポイント2ならば */
+    /* パーティションポイント1 <= 現在層 < パーティションポイント2ならば ==> ここがTAで指定された層ならば */
     if(count_global > partition_point1 && count_global <= partition_point2){
     // to ../main.c
-    make_convolutional_layer_CA(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam, layer.flipped, layer.dot);
+      make_convolutional_layer_CA(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam, layer.flipped, layer.dot);
     }
 
     return layer;
@@ -709,6 +709,7 @@ void parse_net_options(list *options, network *net)
 {
     net->batch = option_find_int(options, "batch", 1);
     if(state == 'p'){
+      // 行うのが推論ならばbatch回数は1回
         net->batch = 1;
     }
     net->learning_rate = option_find_float(options, "learning_rate", .001);
@@ -828,6 +829,8 @@ network *parse_network_cfg(char *filename)
     params.time_steps = net->time_steps;
     params.net = net;
 
+    // printf("パラメータたちの値 batch=%d, h=%d, w=%d, c=%d, inputs=%d, time=%d\n", params.batch, params.h, params.w, params.c, params.inputs, params.time_steps);
+
     size_t workspace_size = 0;
     n = n->next;
     int count = 0;
@@ -921,6 +924,7 @@ network *parse_network_cfg(char *filename)
 
 
         // identify first layers outside TEE and then set to freeze
+        // TEEの外側の最初のレイヤーを識別し、フリーズに設定する。
         if(partition_point1 == count && frozen_bool == 1){
             l.stopbackward = 1;
         }
@@ -931,11 +935,14 @@ network *parse_network_cfg(char *filename)
 
         net->layers[count] = l;
 
+        // printf("now WS=%zn", l.workspace_size);
+
         if (l.workspace_size > workspace_size) workspace_size = l.workspace_size;
         free_section(s);
         n = n->next;
 
         // index of parsing current layer
+        // 現在のレイヤーをパースする際のインデックス
         ++count;
         count_global = count;
 

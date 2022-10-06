@@ -120,6 +120,8 @@ static size_t get_workspace_size(layer l){
         return most;
     }
 #endif
+    // printf("l.out_h=%zu, l.out_w=%zu, l.size=%zu, l.size=%zu, l.c=%zu, l.groups=%zu, sizeof(float)=%zu\n", (size_t)l.out_h, (size_t)l.out_w, (size_t)l.size, l.size, l.c, l.groups, sizeof(float));
+
     return (size_t)l.out_h*l.out_w*l.size*l.size*l.c/l.groups*sizeof(float);
 }
 
@@ -328,17 +330,16 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
 #endif
     }
 #endif
-    printf("get_workspace_sizeで何かの値をとっている？");
-    l.workspace_size = get_workspace_size(l);
-    printf("%zu\n", l.workspace_size);
+    //printf("ワークスペースサイズを取得\n");
+    l.workspace_size = get_workspace_size(l); // == (size_t)l.out_h*l.out_w*l.size*l.size*l.c/l.groups*sizeof(float);
     l.activation = activation;
 
 
     /* パーティションポイント1 <= 現在層 < パーティションポイント2ならば */
     if(count_global <= partition_point1 || count_global > partition_point2){
-        fprintf(stderr, "conv  %5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000.);
-    }else{
-        fprintf(stderr, "conv_TA%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000.);
+        fprintf(stderr, "conv  %5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs  WS=%d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000., l.workspace_size);
+    } else {
+        fprintf(stderr, "conv_TA%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs  WS=%d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000., l.workspace_size);
     }
 
     return l;

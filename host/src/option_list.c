@@ -89,7 +89,7 @@ void option_unused(list *l)
 }
 
 char *option_find(list *l, char *key)
-{
+{//リストlの中に探しているオプションkeyがあればその値p->valを返す、 なければ0を返す
     node *n = l->front;
     while(n){
         kvp *p = (kvp *)n->val;
@@ -125,7 +125,7 @@ int option_find_int_quiet(list *l, char *key, int def)
 }
 
 float option_find_float_quiet(list *l, char *key, float def)
-{
+{// listの中から オプションkeyの値vを返す、なければコードに書かれているdef値を返す
     char *v = option_find(l, key);
     if(v) return atof(v);
     return def;
