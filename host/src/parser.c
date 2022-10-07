@@ -953,7 +953,7 @@ network *parse_network_cfg(char *filename)
             params.inputs = l.outputs;
         }
     }
-    printf("層情報出力終了？\n");
+    // printf("層情報出力終了？\n");
 
     free_list(sections);
     layer out = get_network_output_layer(net);
@@ -1605,7 +1605,8 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff)
         cuda_set_device(net->gpu_index);
     }
 #endif
-    fprintf(stderr, "Loading weights from %s...", filename);
+    // fprintf(stderr, "Loading weights from %s...", filename);
+    fprintf(stderr, "ファイル %s から重みを読み込んでいます...", filename);
     fflush(stdout);
     FILE *fp = fopen(filename, "rb");
     if(!fp) file_error(filename);

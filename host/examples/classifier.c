@@ -707,7 +707,7 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
 
 
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
-{printf("in h/examples/Classifier.c//predict_classifier\n");
+{//printf("in h/examples/Classifier.c//predict_classifier\n");
 
         // predict_classifier(data, cfg, weights, filename, top);
 
@@ -717,6 +717,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
         srand(2222222);
 
+        printf("データセット設定ファイル %s を読みます\n", datacfg);
         list *options = read_data_cfg(datacfg);
 
         char *name_list = option_find_str(options, "names", 0);
@@ -1273,7 +1274,7 @@ void demo_classifier(char *datacfg, char *cfgfile, char *weightfile, int cam_ind
 
 
 void run_classifier(int argc, char **argv)
-{printf("in h/examples/Classifier.c//run_classifier\n");
+{//printf("in h/examples/Classifier.c//run_classifier\n");
         if(argc < 4) {
                 // fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
                 fprintf(stderr, "使い方: %s %s [train/test/valid/ predict] [cfg] [weights (optional)]\n", argv[0], argv[1]);
@@ -1289,12 +1290,12 @@ void run_classifier(int argc, char **argv)
         printf("pp_start の設定開始\n");
         int pp_start = find_int_arg(argc, argv, "-pp_start", 999);
         if(pp_start == 999){ // when using pp_start_f for forzen first layers outside TEE
-            printf("pp_start_f をTEE以外の frozen first layers で使った場合    (when using pp_start_f for forzen first layers outside TEE)\n");
+            // printf("pp_start_f をTEE以外の frozen first layers で使った場合    (when using pp_start_f for forzen first layers outside TEE)\n");
             pp_start = find_int_arg(argc, argv, "-pp_start_f", 999);
             frozen_bool = 1;
         }
         if(pp_start == 999){ // when using pp_f_only for forzen first layers (all in REE)
-            printf("pp_f_only を frozen first layers で使った場合(全てREEで行う)    (when using pp_f_only for forzen first layers (all in REE)) \n");
+            // printf("pp_f_only を frozen first layers で使った場合(全てREEで行う)    (when using pp_f_only for forzen first layers (all in REE)) \n");
             pp_start = find_int_arg(argc, argv, "-pp_f_only", 999);
             frozen_bool = 2;
         }
@@ -1324,7 +1325,7 @@ void run_classifier(int argc, char **argv)
         char *layer_s = (argc > 7) ? argv[7] : 0;
         int layer = layer_s ? atoi(layer_s) : -1;
 
-        printf("data:%s, cfg:%s, weights:%s, filename:%s, top:%s\n", data, cfg, weights, filename, top);
+        // printf("data:%s, cfg:%s, weights:%s, filename:%s, top:%s\n", data, cfg, weights, filename, top);
 
         printf("第2引数の判定(第2引数: %s)\n", argv[2]);
         if(0==strcmp(argv[2], "predict")) {

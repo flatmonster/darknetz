@@ -12,6 +12,8 @@
 /* OP-TEE TEE client API (built by optee_client) */
 #include <tee_client_api.h>
 
+#include <unistd.h>
+
 /* TEE resources */
 TEEC_Context ctx;
 TEEC_Session sess;
@@ -94,6 +96,8 @@ void summary_array(char *print_name, float *arr, int n)
 
 void make_network_CA(int n, float learning_rate, float momentum, float decay, int time_steps, int notruth, int batch, int subdivisions, int random, int adam, float B1, float B2, float eps, int h, int w, int c, int inputs, int max_crop, int min_crop, float max_ratio, float min_ratio, int center, float clip, float angle, float aspect, float saturation, float exposure, float hue, int burn_in, float power, int max_batches)
 {
+  printf("make network CA\n");
+
   TEEC_Operation op;
   uint32_t origin;
   TEEC_Result res;
@@ -208,7 +212,7 @@ void update_net_agrv_CA(int cond, int workspace_size, float *workspace)
 // conv層をここで作っている？
 void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam, int flipped, float dot)
 {
-  printf("do it \n");
+  printf("    convCA開始\n");
   TEEC_Operation op;
   uint32_t origin;
   TEEC_Result res;
@@ -232,8 +236,8 @@ void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int grou
     float passflo = dot;
     char *acti = get_activation_string(activation);
 
-    printf("\n\n情報\n");
-    printf(" passint[0] = %d, passint[1] = %d, passint[2] = %d, passint[3] = %d, passint[4] = %d, passint[5] = %d, passint[6] = %d, passint[7] = %d, passint[8] = %d, passint[9] = %d, passint[10] =%d, passint[11] =%d, passint[12] =%d, passint[13] =%d \n", batch , h , w , c , n , groups , size , stride , padding , batch_normalize , binary , xnor , adam , flipped);
+    // printf("\n\n情報\n");
+    // printf(" passint[0] = %d, passint[1] = %d, passint[2] = %d, passint[3] = %d, passint[4] = %d, passint[5] = %d, passint[6] = %d, passint[7] = %d, passint[8] = %d, passint[9] = %d, passint[10] =%d, passint[11] =%d, passint[12] =%d, passint[13] =%d \n", batch , h , w , c , n , groups , size , stride , padding , batch_normalize , binary , xnor , adam , flipped);
 
     memset(&op, 0, sizeof(op));
     op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_INPUT, TEEC_VALUE_INPUT,
@@ -254,10 +258,12 @@ void make_convolutional_layer_CA(int batch, int h, int w, int c, int n, int grou
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(CONV) failed 0x%x origin 0x%x",
          res, origin);
+  printf("    convCA終了\n");
 }
 
 void make_maxpool_layer_CA(int batch, int h, int w, int c, int size, int stride, int padding)
 {
+  printf("    maxpoolCA開始\n");
   //invoke op and transfer paramters
   TEEC_Operation op;
   uint32_t origin;
@@ -285,11 +291,13 @@ void make_maxpool_layer_CA(int batch, int h, int w, int c, int size, int stride,
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(MAX) failed 0x%x origin 0x%x",
          res, origin);
+  printf("    maxpoolCA終了\n");
 }
 
 
 void make_avgpool_layer_CA(int batch, int h, int w, int c)
 {
+  printf("    avgpoolCA開始\n");
   //invoke op and transfer paramters
   TEEC_Operation op;
   uint32_t origin;
@@ -314,10 +322,12 @@ void make_avgpool_layer_CA(int batch, int h, int w, int c)
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(AVG) failed 0x%x origin 0x%x",
          res, origin);
+  printf("    avgpoolCA終了\n");
 }
 
 void make_dropout_layer_CA(int batch, int inputs, float probability, int w, int h, int c, float *net_prev_output, float *net_prev_delta)
 {
+  printf("    dropoutCA開始\n");
   //invoke op and transfer paramters
   TEEC_Operation op;
   uint32_t origin;
@@ -360,12 +370,14 @@ void make_dropout_layer_CA(int batch, int inputs, float probability, int w, int 
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(DROP) failed 0x%x origin 0x%x",
          res, origin);
+  printf("    dropoutCA終了\n");
 }
 
 
 
 void make_connected_layer_CA(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam)
 {
+    printf("    connectedCA開始\n");
     //invoke op and transfer paramters
     TEEC_Operation op;
     uint32_t origin;
@@ -397,10 +409,12 @@ void make_connected_layer_CA(int batch, int inputs, int outputs, ACTIVATION acti
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(FC) failed 0x%x origin 0x%x",
          res, origin);
+    printf("    connectedCA終了\n");
 }
 
 void make_softmax_layer_CA(int batch, int inputs, int groups, float temperature, int w, int h, int c, int spatial, int noloss)
 {
+    printf("    softmaxCA開始\n");
     //invoke op and transfer paramters
     TEEC_Operation op;
     uint32_t origin;
@@ -431,10 +445,12 @@ void make_softmax_layer_CA(int batch, int inputs, int groups, float temperature,
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(SOFTMAX) failed 0x%x origin 0x%x",
          res, origin);
+    printf("    softmaxCA終了\n");
 }
 
 void make_cost_layer_CA(int batch, int inputs, COST_TYPE cost_type, float scale, float ratio, float noobject_scale, float thresh)
 {
+    printf("    costCA開始\n");
     //invoke op and transfer paramters
     TEEC_Operation op;
     uint32_t origin;
@@ -472,6 +488,9 @@ void make_cost_layer_CA(int batch, int inputs, COST_TYPE cost_type, float scale,
     if (res != TEEC_SUCCESS)
     errx(1, "TEEC_InvokeCommand(COST) failed 0x%x origin 0x%x",
          res, origin);
+
+    sleep(5);
+    printf("    costCA終了\n");
 }
 
 void transfer_weights_CA(float *vec, int length, int layer_i, char type, int additional)

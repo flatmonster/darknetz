@@ -399,7 +399,7 @@ void visualize(char *cfgfile, char *weightfile)
 }
 
 void darknet_main(int argc, char **argv)
-{printf("in h/examples/darknet//darknet_main\n");
+{//printf("in h/examples/darknet//darknet_main\n");
     //test_resize("data/bad.jpg");
     //test_box();
     //test_convolutional_layer();

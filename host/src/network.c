@@ -59,11 +59,12 @@ load_args get_base_args(network *net)
 }
 
 network *load_network(char *cfg, char *weights, int clear)
-{printf("in h/src/network.c//load_network\n");
+{//printf("in h/src/network.c//load_network\n");
     printf("設定ファイルの読み込み %s\n", cfg);
     network *net = parse_network_cfg(cfg);
 
     if(weights && weights[0] != 0){
+        printf("load weight\n");
         load_weights(net, weights);
     }
     if(clear) (*net->seen) = 0;

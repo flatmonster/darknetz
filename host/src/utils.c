@@ -131,9 +131,9 @@ int find_arg(int argc, char* argv[], char *arg)
 }
 
 int find_int_arg(int argc, char **argv, char *arg, int def)
-{printf("in h/src/utils.c//find_int_arg\n");
+{//printf("in h/src/utils.c//find_int_arg\n");
     int i;
-    printf("オプション:%s の引数を確認開始...", arg);
+    // printf("オプション:%s の引数を確認開始...", arg);
     for(i = 0; i < argc-1; ++i){
         if(!argv[i]) continue;
         if(0==strcmp(argv[i], arg)){
@@ -143,7 +143,7 @@ int find_int_arg(int argc, char **argv, char *arg, int def)
             break;
         }
     }
-    printf("オプション:%s の引数は %d\n", arg, def);
+    // printf("オプション:%s の引数は %d\n", arg, def);
     return def;
 }
 
@@ -366,7 +366,7 @@ char *fgetl(FILE *fp)
         curr = strlen(line);
     }
     if(line[curr-1] == '\n') line[curr-1] = '\0';
-    printf("line: %s\n", line);
+    // printf("line: %s\n", line);
     return line;
 }
 
