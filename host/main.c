@@ -3,6 +3,9 @@
 #include <string.h>
 #include <sys/stat.h>
 
+// #define NDEBUG
+#include <assert.h>
+
 #include "darknet.h"
 #include "activations.h"
 #include "cost_layer.h"
@@ -943,6 +946,13 @@ int main(int argc, char **argv)
 {
 
     printf("Prepare session with the TA\n");
+    assert(0);
+    assert(1);
+    #ifdef NDEBUG
+      printf("NDEBUG= yes\n");
+    #else
+      printf("NDEBUG= no\n");
+    #endif
     prepare_tee_session();
 
     printf("Begin darknet\n");
