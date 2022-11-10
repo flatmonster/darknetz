@@ -693,25 +693,32 @@ float *network_predict(network *net, float *input)
     forward_network(net);
 
     float *out;
-    // this partition_point = (-pp) - 1
+    // this partitions point = (-pp) - 1
+    // この partition_point = (-pp) - 1
     // all layers are outside of TEE
+    // すべてのレイヤーはTEEの外で行われる
     if(partition_point1 >= net->n-1){
         out = net->output;
 
      // at least several layers are inside of TEE
+     // 少なくともいくつかのレイヤーがTEEの内側で行われる
     }else if(partition_point1 < net->n-1){
-         // begin at softmax
+         // ソフトマックスからTA処理を開始している場合
          if(net->layers[partition_point1].type == SOFTMAX){
+             // ソフトマックスがNWの最後の層になる場合
              // only the softmax is the last layer in NW
              out = net->output;
 
          // end outside of TEE
+         // TEEの外側で終了する
          }else if(partition_point2 < net->n-1){
              out = net->output;
 
          // end inside of TEE
+         // TEEの内側で終了する
          }else{
-             //call TA to return output
+             // call TA to return output
+             // TAを呼んで出力を返す
              net_output_return_CA(net->outputs, 1);
              out = net_output_back;
          }
