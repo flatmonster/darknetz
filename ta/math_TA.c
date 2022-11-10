@@ -73,7 +73,7 @@ double ta_exp(double x)
 
      //char char0[30];
      //ftoa(rand_num, char0, 5);
-     //IMSG("rand_num=%s\n",char0);
+     // IMSG("rand_num=%s\n",char0);
 
      return rand_num;
  }

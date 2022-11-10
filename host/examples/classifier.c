@@ -709,7 +709,6 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
 {//printf("in h/examples/Classifier.c//predict_classifier\n");
 
-        // predict_classifier(data, cfg, weights, filename, top);
 
         network *net = load_network(cfgfile, weightfile, 0);
         set_batch_network(net, 1);
@@ -749,10 +748,13 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 float *X = r.data;
 
+                printf("predict start:%ld\n", clock())
                 time=clock();
+                // DEBUGCOMMENT start predict?
                 float *predictions = network_predict(net, X);
                 if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
 
+                // DEBUGCOMMENT sort predict results
                 top_k(predictions, net->outputs, top, indexes);
 
                 free(net_output_back);
@@ -798,7 +800,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                         int index = indexes[i];
                         //if(net->hierarchy) printf("%d, %s: %f, parent: %s \n",index, names[index], predictions[index], (net->hierarchy->parent[index] >= 0) ? names[net->hierarchy->parent[index]] : "Root");
                         //else printf("%s: %f\n",names[index], predictions[index]);
-                        printf("%5.2f%%: %s\n", predictions[index]*100, names[index]);
+                        printf("%5.12f%%: %s\n", predictions[index]*100, names[index]);
                 }
 
 
