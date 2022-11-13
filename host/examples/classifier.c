@@ -707,7 +707,12 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
 
 
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
-{//printf("in h/examples/Classifier.c//predict_classifier\n");
+{
+  // predict_classifier(data, cfg, weights, filename, top);
+  // datacfg= argv[3]= cfg/mnist.dataset
+  // cfgfile= argv[4]= cfg/mnist_lenet.cfg 
+  // weightfile= argv[5]= models/mnist/mnist_lenet.weights
+  // filename= argv[6]= data/mnist/images/t_00007_c3.png
 
 
         network *net = load_network(cfgfile, weightfile, 0);
@@ -750,8 +755,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 printf("predict start:%ld\n", clock());
                 time = clock();
-                // DEBUGCOMMENT start predict?
-                float *predictions = network_predict(net, X);   // /work/latest/optee_examples/darknetz/host/src/network.c
+                float *predictions = network_predict(net, X);   // ~/work/latest/optee_examples/darknetz/host/src/network.c
                 if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
 
                 // DEBUGCOMMENT sort predict results
@@ -1327,7 +1331,7 @@ void run_classifier(int argc, char **argv)
         char *layer_s = (argc > 7) ? argv[7] : 0;
         int layer = layer_s ? atoi(layer_s) : -1;
 
-        // printf("data:%s, cfg:%s, weights:%s, filename:%s, top:%s\n", data, cfg, weights, filename, top);
+        // printf("filename = %s\n", filename);
 
         printf("第2引数の判定(第2引数: %s)\n", argv[2]);
         if(0==strcmp(argv[2], "predict")) {

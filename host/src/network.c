@@ -246,7 +246,7 @@ void forward_network(network *netp)
     // if(wssize == -1)  {
         // wssize = workspaceBOO(net);
         // if(wssize) update_net_agrv_CA_allocateSM(wssize, net.workspace);
-    // }
+    // };
     //if(wssize)  update_net_agrv_CA(0, wssize, net.workspace);
 
     int i;
@@ -262,6 +262,7 @@ void forward_network(network *netp)
             }
 
             forward_network_CA(net.input, l.inputs, net.batch, net.train);
+            // debugmessage
             //if(wssize)  workspace_CA(wssize, net.workspace);
 
             //i = partition_point2 + 1; // jump to further forward in CA
@@ -697,26 +698,32 @@ float *network_predict(network *net, float *input)
     // この partition_point = (-pp) - 1
     // all layers are outside of TEE
     // すべてのレイヤーはTEEの外で行われる
+    printf("pp1=%d, pp2=%d, net(n)=%d net(n-1)=%d \n", partition_point1, partition_point2, net->n, net->n-1);
     if(partition_point1 >= net->n-1){
+        printf("すべてのレイヤーはTEEの外で行われる\n");
         out = net->output;
 
      // at least several layers are inside of TEE
      // 少なくともいくつかのレイヤーがTEEの内側で行われる
     }else if(partition_point1 < net->n-1){
+         // begin at softmax
          // ソフトマックスからTA処理を開始している場合
          if(net->layers[partition_point1].type == SOFTMAX){
-             // ソフトマックスがNWの最後の層になる場合
+             printf("ソフトマックスからTA処理を開始している場合\n");
              // only the softmax is the last layer in NW
+             // ソフトマックスがNWの最後の層になる場合
              out = net->output;
 
          // end outside of TEE
          // TEEの外側で終了する
          }else if(partition_point2 < net->n-1){
+             printf("TEEの外側で終了する\n");
              out = net->output;
 
          // end inside of TEE
          // TEEの内側で終了する
          }else{
+             printf("TEEの内側で終了する\n");
              // call TA to return output
              // TAを呼んで出力を返す
              net_output_return_CA(net->outputs, 1);
@@ -725,6 +732,7 @@ float *network_predict(network *net, float *input)
      }
 
      *net = orig;
+     printf("out=%f\n", out);
      return out;
 }
 

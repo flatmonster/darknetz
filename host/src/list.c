@@ -4,7 +4,7 @@
 
 list *make_list()
 {//printf("in h/src/list.c//make_list  ");
-    printf("listの作成\n");
+    // printf("listの作成\n");
     list *l = malloc(sizeof(list));
     l->size = 0;
     l->front = 0;
