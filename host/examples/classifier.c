@@ -756,12 +756,30 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 printf("predict start:%ld\n", clock());
                 time = clock();
                 float *predictions = network_predict(net, X);   // ../../host/src/network.c
-                if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
+
+
+                // DEBUGCOMMENT test
+                //printf("%5.12f%%: %s\n", predictions[index]*100, names[index]);
+
+                if(net->hierarchy) {
+                  printf("######################################### do it? \n");
+                  hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1); // ../../host/src/tree.c
+                }
 
                 // DEBUGCOMMENT sort predict results
-                top_k(predictions, net->outputs, top, indexes);
+                // top_k(predictions, net->outputs, top, indexes); // ../../host/src/utils.c
+                indexes[0] = 0;
+                indexes[1] = 1;
+                indexes[2] = 2;
+                indexes[3] = 3;
+                indexes[4] = 4;
+                indexes[5] = 5;
+                indexes[6] = 6;
+                indexes[7] = 7;
+                indexes[8] = 8;
+                indexes[9] = 9;
 
-                free(net_output_back);
+                free(net_output_back); 
 
                 struct rusage usage;
                 struct timeval startu, endu, starts, ends;
@@ -803,12 +821,20 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 for(i = 0; i < top; ++i) {
                         int index = indexes[i];
+                        printf("indexes=%d\n", indexes[i]);
                         //if(net->hierarchy) printf("%d, %s: %f, parent: %s \n",index, names[index], predictions[index], (net->hierarchy->parent[index] >= 0) ? names[net->hierarchy->parent[index]] : "Root");
                         //else printf("%s: %f\n",names[index], predictions[index]);
-                        printf("%5.12f%%: %s\n", predictions[index]*100, names[index]);
+                        printf("%5.12f%%: %s\n", predictions[index]*100.0, names[index]);
+
+                        printf("predictions[%d]: %5.12f\n", i, net->output[i] * 100.0);
+
                 }
-
-
+                
+                printf("\n");
+                printf("predictions        pointer : %p\n", &predictions);
+                printf("net->output        pointer : %p\n", &net->output);
+                printf("predictions        pointer : %p\n", predictions);
+                printf("net->output        pointer : %p\n", net->output);
 
                 getrusage(RUSAGE_SELF, &usage);
                 endu = usage.ru_utime;

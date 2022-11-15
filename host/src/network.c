@@ -255,7 +255,7 @@ void forward_network(network *netp)
         net.index = i;
         layer l = net.layers[i];
         
-        // pp_start ~ pp_end の間に居る時だけ
+        // iが pp_start ~ pp_end の間に居る時だけ
         if(i > partition_point1 && i <= partition_point2)
         {
             // forward all the others in TEE
@@ -739,7 +739,12 @@ float *network_predict(network *net, float *input)
      }
 
      *net = orig;
-     printf("out=%f\n", out);
+     for(int i=0;i<10;i++){
+       printf("out layer %d: %5.12f\n",i,out[i]);
+       printf("out layer %d: %1.8f\n",i,out[i]);
+     }
+     printf("out               pointer : %p\n", &out);
+     printf("out               pointer : %p\n", out);
      return out;
 }
 
