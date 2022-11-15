@@ -23,8 +23,8 @@
 
 float *netta_truth;
 int netnum = 0;
-int debug_summary_com = 0;
-int debug_summary_pass = 0;
+int debug_summary_com = 1;
+int debug_summary_pass = 1;
 int norm_output = 1;
 
 

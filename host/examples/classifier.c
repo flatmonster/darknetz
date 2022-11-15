@@ -745,7 +745,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                         strtok(input, "\n");
                 }
                 image im = load_image_color(input, 0, 0);
-                image r = letterbox_image(im, net->w, net->h);  // ~/work/latest/optee_examples/darknetz/host/src/image.c
+                image r = letterbox_image(im, net->w, net->h);  // ../../host/src/image.c
                 //image r = resize_min(im, 320);
                 //printf("%d %d\n", r.w, r.h);
                 //resize_network(net, r.w, r.h);
@@ -755,7 +755,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 printf("predict start:%ld\n", clock());
                 time = clock();
-                float *predictions = network_predict(net, X);   // ~/work/latest/optee_examples/darknetz/host/src/network.c
+                float *predictions = network_predict(net, X);   // ../../host/src/network.c
                 if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
 
                 // DEBUGCOMMENT sort predict results
@@ -799,6 +799,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
                 fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
+                printf("predict end:%ld\n", clock());
 
                 for(i = 0; i < top; ++i) {
                         int index = indexes[i];

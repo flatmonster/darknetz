@@ -37,8 +37,8 @@
 #include "parser.h"
 #include "data.h"
 
-int debug_summary_com = 0;
-int debug_summary_pass = 0;
+int debug_summary_com = 1;
+int debug_summary_pass = 1;
 
 load_args get_base_args(network *net)
 {
@@ -232,6 +232,7 @@ int workspaceBOO(network net)
 
 int wssize = -1;
 
+// これをするの？ 全データをニューラルネットワークに通し、誤差関数を求める。（Forward処理）
 void forward_network(network *netp)
 {
 #ifdef GPU
@@ -253,22 +254,26 @@ void forward_network(network *netp)
     for(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-
+        
+        // pp_start ~ pp_end の間に居る時だけ
         if(i > partition_point1 && i <= partition_point2)
         {
             // forward all the others in TEE
             if(debug_summary_com == 1){
                 summary_array("forward_network / net.input", net.input, l.inputs*net.batch);
             }
-
-            forward_network_CA(net.input, l.inputs, net.batch, net.train);
-            // debugmessage
+          
+            printf("net.input=%f\n", net.input);
+            forward_network_CA(net.input, l.inputs, net.batch, net.train); // ./../main.c
+            printf("net.input=%f\n", net.input);
             //if(wssize)  workspace_CA(wssize, net.workspace);
 
             //i = partition_point2 + 1; // jump to further forward in CA
+            // CAでさらに前方にジャンプ
             i = partition_point2;
 
             // receive parames (layer partition_point2's outputs) from TA
+            // TA からパラメーター (レイヤー partition_point2 の出力) を受け取る
             if(partition_point2 < net.n - 1)
             {
                 layer l_pp2 = net.layers[partition_point2];
@@ -307,6 +312,7 @@ void forward_network(network *netp)
 
 
 
+// これをするの？ パラメーターの更新を行います
 void update_network(network *netp)
 {
 #ifdef GPU
@@ -377,6 +383,7 @@ int get_predicted_class_network(network *net)
 
 
 
+// これをするの？ 誤差逆伝播法によりニューラルネットワークの各パラメーターの誤差を計算する。（Backward処理）
 void backward_network(network *netp)
 {
 #ifdef GPU
@@ -691,14 +698,14 @@ float *network_predict(network *net, float *input)
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
-    forward_network(net);
+    forward_network(net); 
 
     float *out;
     // this partitions point = (-pp) - 1
     // この partition_point = (-pp) - 1
     // all layers are outside of TEE
     // すべてのレイヤーはTEEの外で行われる
-    printf("pp1=%d, pp2=%d, net(n)=%d net(n-1)=%d \n", partition_point1, partition_point2, net->n, net->n-1);
+    // printf("pp1=%d, pp2=%d, net(n)=%d net(n-1)=%d \n", partition_point1, partition_point2, net->n, net->n-1);
     if(partition_point1 >= net->n-1){
         printf("すべてのレイヤーはTEEの外で行われる\n");
         out = net->output;

@@ -24,7 +24,7 @@ float *net_delta_back;
 float *net_output_back;
 int sysCount = 0;
 char state;
-int debug_plot_bool = 0;
+int debug_plot_bool = 1;
 
 void debug_plot(char *filename, int num, float *tobeplot, int length)
 {
