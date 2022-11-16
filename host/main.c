@@ -7,6 +7,7 @@
 #include "activations.h"
 #include "cost_layer.h"
 
+#include "include/darknet.h"
 #include "main.h"
 
 /* OP-TEE TEE client API (built by optee_client) */
@@ -909,26 +910,75 @@ void calc_network_loss_CA(int n, int batch)
 }
 
 void net_output_return_CA(int net_outputs, int net_batch)
-{
+{   //DEBUGMESSAGE
     //invoke op and transfer paramters
     TEEC_Operation op;
     uint32_t origin;
     TEEC_Result res;
 
-    net_output_back = malloc(sizeof(float) * net_outputs * net_batch);
+    printf("did it?\n");
 
+    net_output_back = malloc(sizeof(float) * net_outputs * net_batch);
+    printf("outputs: %d, net_batch: %d \n", net_outputs, net_batch);
     memset(&op, 0, sizeof(op));
+
+    
+    // origin
     op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_OUTPUT,
                                      TEEC_NONE,
                                      TEEC_NONE, TEEC_NONE);
+    
+    // test   errored
+    // op.paramTypes = TEEC_PARAM_TYPES(TEEC_NONE,
+    //                                  TEEC_MEMREF_TEMP_OUTPUT,
+    //                                  TEEC_NONE, TEEC_NONE);
+
+    // ~/work/3.19.0/optee_examples/acipher/host/main.c
+    // op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_INPUT,
+    //                                  TEEC_MEMREF_TEMP_OUTPUT,
+    //                                  TEEC_NONE, TEEC_NONE);
+      
+ 
+
+    // printf("op.params                 : %5.12f \n", op.params[0].tmpref.buffer);
+    // printf("net_output_back           : %5.12f \n",net_output_back);
+    // for(int i=0;i<10;i++){
+    //     printf("before net_output_back[%d]: %5.12f \n", i, net_output_back[i]);
+    //  }
 
     op.params[0].tmpref.buffer = net_output_back;
+
+    printf("op.params                : %5.12f \n", op.params[0].tmpref.buffer);
+    printf("net_output_back          : %5.12f \n",net_output_back);
+    for(int i=0;i<10;i++){
+        printf("net_output_back[%d]       : %5.12f \n", i, net_output_back[i]);
+     }
+
     op.params[0].tmpref.size = sizeof(float) * net_outputs * net_batch;
+
+
+    printf("op.params                  : %6.12f \n", op.params[0].tmpref.buffer);
+    printf("net_output_back            : %5.12f \n",net_output_back);
+    for(int i=0;i<10;i++){
+        printf("after net_output_back[%d]  : %5.12f \n", i, net_output_back[i]);
+     }
 
     res = TEEC_InvokeCommand(&sess, OUTPUT_RETURN_CMD,
                              &op, &origin);
 
+    // ~/work/3.19.0/optee_examples/hello_world/host/main.c
+    // res = TEEC_InvokeCommand(&sess, TA_HELLO_WORLD_CMD_INC_VALUE, 
+    //                          &op, &err_origin);
+      
+      
+    printf("op.params                   : %5.12f \n", op.params[0].tmpref.buffer);
+    printf("net_output_back             : %5.12f \n",net_output_back);
+    for(int i=0;i<10;i++){
+        printf("invokd net_output_back[%d]  : %5.12f \n", i, net_output_back[i]);
+     }
+
     float *tem = op.params[0].tmpref.buffer;
+    
 
     if (res != TEEC_SUCCESS)
         errx(1, "TEEC_InvokeCommand(return) failed 0x%x origin 0x%x",

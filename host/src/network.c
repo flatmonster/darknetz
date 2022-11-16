@@ -717,6 +717,7 @@ float *network_predict(network *net, float *input)
          // ソフトマックスからTA処理を開始している場合
          if(net->layers[partition_point1].type == SOFTMAX){
              printf("ソフトマックスからTA処理を開始している場合\n");
+             printf("ソフトマックスがNWの最後の層になる場合\n");
              // only the softmax is the last layer in NW
              // ソフトマックスがNWの最後の層になる場合
              out = net->output;
@@ -733,7 +734,7 @@ float *network_predict(network *net, float *input)
              printf("TEEの内側で終了する\n");
              // call TA to return output
              // TAを呼んで出力を返す
-             net_output_return_CA(net->outputs, 1);
+             net_output_return_CA(net->outputs, 1); // ../main.c
              out = net_output_back;
          }
      }
@@ -741,9 +742,8 @@ float *network_predict(network *net, float *input)
      *net = orig;
      for(int i=0;i<10;i++){
        printf("out layer %d: %5.12f\n",i,out[i]);
-       printf("out layer %d: %1.8f\n",i,out[i]);
+       // printf("out layer %d: %1.8f\n",i,out[i]);
      }
-     printf("out               pointer : %p\n", &out);
      printf("out               pointer : %p\n", out);
      return out;
 }
