@@ -768,7 +768,6 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 // DEBUGCOMMENT sort predict results
                 top_k(predictions, net->outputs, top, indexes); // ../../host/src/utils.c
 
-                free(net_output_back); 
 
                 struct rusage usage;
                 struct timeval startu, endu, starts, ends;
@@ -837,6 +836,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 if(r.data != im.data) free_image(r);
                 free_image(im);
                 if (filename) break;
+                free(net_output_back); 
         }
 }
 

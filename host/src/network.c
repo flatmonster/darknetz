@@ -263,9 +263,7 @@ void forward_network(network *netp)
                 summary_array("forward_network / net.input", net.input, l.inputs*net.batch);
             }
           
-            printf("net.input=%f\n", net.input);
             forward_network_CA(net.input, l.inputs, net.batch, net.train); // ./../main.c
-            printf("net.input=%f\n", net.input);
             //if(wssize)  workspace_CA(wssize, net.workspace);
 
             //i = partition_point2 + 1; // jump to further forward in CA
@@ -297,6 +295,8 @@ void forward_network(network *netp)
             l.forward(l, net);
 
             if(debug_summary_pass == 1){
+                // DEBUGMESSAGE
+                printf("maybe this ?\n");
                 summary_array("forward_network / l.output", l.output, l.inputs*net.batch);
             }
 
