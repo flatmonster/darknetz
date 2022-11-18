@@ -416,7 +416,7 @@ STBIDEF int      stbi_is_hdr_from_file(FILE *f);
 // NOT THREADSAFE
 STBIDEF const char *stbi_failure_reason  (void);
 
-// free the loaded image -- this is just free()
+////free(the loaded image -- this is just//free()
 STBIDEF void     stbi_image_free      (void *retval_from_stbi_load);
 
 // get image dimensions & components without fully decoding
@@ -580,7 +580,7 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #ifndef STBI_MALLOC
 #define STBI_MALLOC(sz)           malloc(sz)
 #define STBI_REALLOC(p,newsz)     realloc(p,newsz)
-#define STBI_FREE(p)              free(p)
+#define STBI_FREE(p)             //free(p)
 #endif
 
 #ifndef STBI_REALLOC_SIZED
@@ -616,7 +616,7 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 // See https://github.com/nothings/stb/issues/81 for more information.
 //
 // So default to no SSE2 on 32-bit MinGW. If you've read this far and added
-// -mstackrealign to your build settings, feel free to #define STBI_MINGW_ENABLE_SSE2.
+// -mstackrealign to your build settings, feel//free(to #define STBI_MINGW_ENABLE_SSE2.
 #define STBI_NO_SIMD
 #endif
 
@@ -1508,7 +1508,7 @@ static stbi__uint32 stbi__get32le(stbi__context *s)
 //    and it never has alpha, so very few cases ). png can automatically
 //    interleave an alpha=255 channel, but falls back to this for other cases
 //
-//  assume data buffer is malloced, so malloc a new one and free that one
+//  assume data buffer is malloced, so malloc a new one and//free(that one
 //  only failure mode is malloc failing
 
 static stbi_uc stbi__compute_y(int r, int g, int b)
@@ -4641,7 +4641,7 @@ static int stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, int len, int
    p = (stbi_uc *) stbi__malloc_mad2(pixel_count, pal_img_n, 0);
    if (p == NULL) return stbi__err("outofmem", "Out of memory");
 
-   // between here and free(out) below, exitting would leak
+   // between here and//free(out) below, exitting would leak
    temp_out = p;
 
    if (pal_img_n == 3) {
@@ -6544,7 +6544,7 @@ static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y,
          }
       } while (u != 0); 
 
-      // free temp buffer; 
+      ////free(temp buffer; 
       STBI_FREE(g.out); 
       STBI_FREE(g.history); 
       STBI_FREE(g.background); 
@@ -6578,7 +6578,7 @@ static void *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req
          u = stbi__convert_format(u, 4, req_comp, g.w, g.h);
    }
 
-   // free buffers needed for multiple frame loading; 
+   ////free(buffers needed for multiple frame loading; 
    STBI_FREE(g.history);
    STBI_FREE(g.background); 
 
@@ -7425,7 +7425,7 @@ This software is available under 2 licenses -- choose whichever you prefer.
 ------------------------------------------------------------------------------
 ALTERNATIVE A - MIT License
 Copyright (c) 2017 Sean Barrett
-Permission is hereby granted, free of charge, to any person obtaining a copy of
+Permission is hereby granted,//free(of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
 the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
@@ -7442,8 +7442,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ------------------------------------------------------------------------------
 ALTERNATIVE B - Public Domain (www.unlicense.org)
-This is free and unencumbered software released into the public domain.
-Anyone is free to copy, modify, publish, use, compile, sell, or distribute this
+This is//free(and unencumbered software released into the public domain.
+Anyone is//free(to copy, modify, publish, use, compile, sell, or distribute this
 software, either in source code form or as a compiled binary, for any purpose,
 commercial or non-commercial, and by any means.
 In jurisdictions that recognize copyright laws, the author or authors of this

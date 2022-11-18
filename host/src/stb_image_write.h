@@ -30,12 +30,12 @@ BUILDING:
 
    You can #define STBIW_ASSERT(x) before the #include to avoid using assert.h.
    You can #define STBIW_MALLOC(), STBIW_REALLOC(), and STBIW_FREE() to replace
-   malloc,realloc,free.
+   malloc,reallocfree(
    You can #define STBIW_MEMMOVE() to replace memmove()
    You can #define STBIW_ZLIB_COMPRESS to use a custom zlib-style compress function
    for PNG compression (instead of the builtin one), it must have the following signature:
    unsigned char * my_compress(unsigned char *data, int data_len, int *out_len, int quality);
-   The returned data will be freed with STBIW_FREE() (free() by default),
+   The returned data will be freed with STBIW_FREE() free() by default),
    so it must be heap allocated with STBIW_MALLOC() (malloc() by default),
 
 USAGE:
@@ -218,7 +218,7 @@ STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
 #ifndef STBIW_MALLOC
 #define STBIW_MALLOC(sz)        malloc(sz)
 #define STBIW_REALLOC(p,newsz)  realloc(p,newsz)
-#define STBIW_FREE(p)           free(p)
+#define STBIW_FREE(p)          free(p)
 #endif
 
 #ifndef STBIW_REALLOC_SIZED
@@ -1531,7 +1531,7 @@ This software is available under 2 licenses -- choose whichever you prefer.
 ------------------------------------------------------------------------------
 ALTERNATIVE A - MIT License
 Copyright (c) 2017 Sean Barrett
-Permission is hereby granted, free of charge, to any person obtaining a copy of 
+Permission is hereby granted,//free(of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal in 
 the Software without restriction, including without limitation the rights to 
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
@@ -1548,8 +1548,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ------------------------------------------------------------------------------
 ALTERNATIVE B - Public Domain (www.unlicense.org)
-This is free and unencumbered software released into the public domain.
-Anyone is free to copy, modify, publish, use, compile, sell, or distribute this 
+This is//free(and unencumbered software released into the public domain.
+Anyone is//free(to copy, modify, publish, use, compile, sell, or distribute this 
 software, either in source code form or as a compiled binary, for any purpose, 
 commercial or non-commercial, and by any means.
 In jurisdictions that recognize copyright laws, the author or authors of this 

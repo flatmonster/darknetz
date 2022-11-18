@@ -38,7 +38,7 @@ tee-supplicant -d
 xtest
 ```
 
-Note: you may face OP-TEE related problem/errors during setup, please also free feel to raise issues in [their pages](https://github.com/OP-TEE/optee_os).
+Note: you may face OP-TEE related problem/errors during setup, please also//free(feel to raise issues in [their pages](https://github.com/OP-TEE/optee_os).
 
 ## (2) Build DarkneTZ
 1) clone codes and datasets
@@ -160,7 +160,7 @@ MIT License
 
 Copyright (c) 2019 Fan Mo, f.mo18@imperial.ac.uk
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
+Permission is hereby granted,//free(of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell

@@ -125,7 +125,7 @@ void train_segmenter(char *datacfg, char *cfgfile, char *weightfile, int *gpus, 
     free_network(net);
     free_ptrs((void**)paths, plist->size);
     free_list(plist);
-    free(base);
+   //free(base);
 }
 
 void predict_segmenter(char *datafile, char *cfg, char *weights, char *filename)

@@ -205,7 +205,7 @@ void forward_detection_layer(const detection_layer l, network net)
                     }
                 }
             }
-            free(costs);
+           //free(costs);
         }
 
 

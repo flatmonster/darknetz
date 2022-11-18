@@ -10,8 +10,10 @@
 void free_matrix(matrix m)
 {
     int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    for(i = 0; i < m.rows; ++i){
+//free(m.vals[i]);
+    }
+   //free(m.vals);
 }
 
 float matrix_topk_accuracy(matrix truth, matrix guess, int k)
@@ -30,7 +32,7 @@ float matrix_topk_accuracy(matrix truth, matrix guess, int k)
             }
         }
     }
-    free(indexes);
+   //free(indexes);
     return (float)correct/truth.rows;
 }
 
@@ -55,7 +57,7 @@ matrix resize_matrix(matrix m, int size)
         }
     } else if (m.rows > size) {
         for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+           //free(m.vals[i]);
         }
         m.vals = realloc(m.vals, size*sizeof(float*));
     }
@@ -150,7 +152,7 @@ matrix csv_to_matrix(char *filename)
             m.vals = realloc(m.vals, size*sizeof(float*));
         }
         m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+       //free(line);
         ++n;
     }
     m.vals = realloc(m.vals, n*sizeof(float*));

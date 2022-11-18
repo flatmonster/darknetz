@@ -424,7 +424,7 @@ static TEE_Result make_cost_layer_TA_params(uint32_t param_types,
 
     // allocate net.truth when the cost layer inside TEE
     netta_truth = malloc(inputs * batch * sizeof(float));
-    //free(netta_truth) needed
+    ///free(netta_truth) needed
 
     return TEE_SUCCESS;
 }
@@ -485,7 +485,7 @@ static TEE_Result save_weights_TA_params(uint32_t param_types,
         vec[z] = weights_encrypted[z];
     }
 
-    free(weights_encrypted);
+   //free(weights_encrypted);
     return TEE_SUCCESS;
 }
 
@@ -563,7 +563,7 @@ static TEE_Result forward_network_back_TA_params(uint32_t param_types,
     }
 
     // ?????
-    //free(ta_net_input);
+    ///free(ta_net_input);
     if(debug_summary_com == 1){
         summary_array("forward_network_back / l_pp2.output", netta.layers[netta.n-1].output, buffersize);
     }
@@ -594,8 +594,8 @@ static TEE_Result forward_network_back_TA_params(uint32_t param_types,
 //         params1[z] = ta_net_delta[z];
 //     }
 //
-//     //free(ltaoutput_diff);
-//     //free(ltadelta_diff);
+//     ///free(ltaoutput_diff);
+//     ///free(ltadelta_diff);
 //     return TEE_SUCCESS;
 // }
 
@@ -656,10 +656,10 @@ static TEE_Result backward_network_TA_addidion_params(uint32_t param_types,
         params0[z] = ta_net_input[z];
         params1[z] = ta_net_delta[z];
     }
-    //free(ta_net_input);
-    //free(ta_net_delta);
-    //free(ltaoutput_diff);
-    //free(ltadelta_diff);
+    ///free(ta_net_input);
+    ///free(ta_net_delta);
+    ///free(ltaoutput_diff);
+    ///free(ltadelta_diff);
 
     if(debug_summary_com == 1){
         summary_array("backward_network_addidion / l_pp1.output", ta_net_input, buffersize);
@@ -867,7 +867,7 @@ static TEE_Result net_output_return_TA_params(uint32_t param_types,
         params0[z] = ta_net_output[z];
     }
 
-    free(ta_net_output);
+   //free(ta_net_output);
 
     return TEE_SUCCESS;
 

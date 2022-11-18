@@ -56,7 +56,7 @@ void transpose_matrix_TA(float *a, int rows, int cols)
         }
     }
     memcpy(a, transpose, rows*cols*sizeof(float));
-    free(transpose);
+   //free(transpose);
 }
 
 
@@ -98,7 +98,7 @@ void load_weights_TA(float *vec, int length, int layer_i, char type, int transpo
         }
     }
 
-    free(tempvec);
+   //free(tempvec);
 }
 
 void save_weights_TA(float *weights_encrypted, int length, int layer_i, char type)

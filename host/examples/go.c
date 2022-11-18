@@ -21,7 +21,7 @@ char *fgetgo(FILE *fp)
     size_t size = 96;
     char *line = malloc(size*sizeof(char));
     if(size != fread(line, sizeof(char), size, fp)){
-        free(line);
+       //free(line);
         return 0;
     }
 
@@ -206,7 +206,7 @@ void train_go(char *cfgfile, char *weightfile, char *filename, int *gpus, int ng
     save_weights(net, buff);
 
     free_network(net);
-    free(base);
+   //free(base);
 }
 
 static void propagate_liberty(float *board, int *lib, int *visited, int row, int col, int side)
@@ -350,7 +350,7 @@ void move_go(float *b, int p, int r, int c)
     remove_connected(b, l, -p, r-1, c);
     remove_connected(b, l, -p, r, c+1);
     remove_connected(b, l, -p, r, c-1);
-    free(l);
+   //free(l);
 }
 
 int compare_board(float *a, float *b)
@@ -377,17 +377,17 @@ void free_mcts(mcts_tree *root)
 {
     if(!root) return;
     int i;
-    free(root->board);
+   //free(root->board);
     for(i = 0; i < 19*19+1; ++i){
         if(root->children[i]) free_mcts(root->children[i]);
     }
-    free(root->children);
-    free(root->prior);
-    free(root->visit_count);
-    free(root->value);
-    free(root->mean);
-    free(root->prob);
-    free(root);
+   //free(root->children);
+   //free(root->prior);
+   //free(root->visit_count);
+   //free(root->value);
+   //free(root->mean);
+   //free(root->prob);
+   //free(root);
 }
 
 float *network_predict_rotations(network *net, float *next)
@@ -415,8 +415,8 @@ float *network_predict_rotations(network *net, float *next)
             axpy_cpu(19*19+2, 1, im.data, 1, pred, 1);
         }
     }
-    free(in);
-    free(inds);
+   //free(in);
+   //free(inds);
     scal_cpu(19*19+2, 1./n, pred, 1);
     return pred;
 }
@@ -630,7 +630,7 @@ int suicide_go(float *b, int p, int r, int c)
     safe = safe || makes_safe_go(b, l, p, r-1, c);
     safe = safe || makes_safe_go(b, l, p, r, c+1);
     safe = safe || makes_safe_go(b, l, p, r, c-1);
-    free(l);
+   //free(l);
     return !safe;
 }
 
@@ -959,7 +959,7 @@ void engine_go(char *filename, char *weightfile, int mcts_iters, float secs, flo
                 passed = 1;
                 printf("=%s \n\n", ids);
                 char *line = fgetl(stdin);
-                free(line);
+               //free(line);
                 fflush(stdout);
                 fflush(stderr);
                 root = move_mcts(root, 19*19);
@@ -1043,7 +1043,7 @@ void engine_go(char *filename, char *weightfile, int mcts_iters, float secs, flo
             scanf("%s", type);
             fprintf(stderr, "final_status\n");
             char *line = fgetl(stdin);
-            free(line);
+           //free(line);
             if(type[0] == 'd' || type[0] == 'D'){
                 int i;
                 FILE *f = fopen("game.txt", "w");
@@ -1052,13 +1052,13 @@ void engine_go(char *filename, char *weightfile, int mcts_iters, float secs, flo
                 fclose(f);
                 FILE *p = popen("./gnugo --mode gtp < game.txt", "r");
                 for(i = 0; i < count; ++i){
-                    free(fgetl(p));
-                    free(fgetl(p));
+                   //free(fgetl(p));
+                   //free(fgetl(p));
                 }
                 char *l = 0;
                 while((l = fgetl(p))){
                     printf("%s\n", l);
-                    free(l);
+                   //free(l);
                 }
             } else {
                 printf("?%s unknown command\n\n", ids);
@@ -1068,7 +1068,7 @@ void engine_go(char *filename, char *weightfile, int mcts_iters, float secs, flo
             scanf("%s", type);
             fprintf(stderr, "kgs-genmove_cleanup\n");
             char *line = fgetl(stdin);
-            free(line);
+           //free(line);
             int i;
             FILE *f = fopen("game.txt", "w");
             int count = print_game(board, f);
@@ -1076,17 +1076,17 @@ void engine_go(char *filename, char *weightfile, int mcts_iters, float secs, flo
             fclose(f);
             FILE *p = popen("./gnugo --mode gtp < game.txt", "r");
             for(i = 0; i < count; ++i){
-                free(fgetl(p));
-                free(fgetl(p));
+               //free(fgetl(p));
+               //free(fgetl(p));
             }
             char *l = 0;
             while((l = fgetl(p))){
                 printf("%s\n", l);
-                free(l);
+               //free(l);
             }
         } else {
             char *line = fgetl(stdin);
-            free(line);
+           //free(line);
             printf("?%s unknown command\n\n", ids);
         }
         fflush(stdout);
@@ -1178,7 +1178,7 @@ void test_go(char *cfg, char *weights, int multi)
                 }
             }
         }
-        free(line);
+       //free(line);
         flip_board(board);
         color = -color;
     }
@@ -1193,8 +1193,8 @@ float score_game(float *board)
     fclose(f);
     FILE *p = popen("./gnugo --mode gtp < game.txt", "r");
     for(i = 0; i < count; ++i){
-        free(fgetl(p));
-        free(fgetl(p));
+       //free(fgetl(p));
+       //free(fgetl(p));
     }
     char *l = 0;
     float score = 0;
@@ -1202,7 +1202,7 @@ float score_game(float *board)
     while((l = fgetl(p))){
         fprintf(stderr, "%s  \t", l);
         int n = sscanf(l, "= %c+%f", &player, &score);
-        free(l);
+       //free(l);
         if (n == 2) break;
     }
     if(player == 'W') score = -score;

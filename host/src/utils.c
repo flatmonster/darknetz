@@ -330,8 +330,10 @@ void strip_char(char *s, char bad)
 void free_ptrs(void **ptrs, int n)
 {
     int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    for(i = 0; i < n; ++i){
+//free(ptrs[i]);
+    }
+   //free(ptrs);
 }
 
 char *fgetl(FILE *fp)
@@ -345,7 +347,7 @@ char *fgetl(FILE *fp)
     char *line = malloc(size*sizeof(char));
     if(!fgets(line, size, fp)){ // fgets(戻り値の戻り先, 読み込む文字列のサイズ, 読み込みファイル): file get string
         printf("読んでいるファイルの文字が読み込めなかった または EOF です\n");
-        free(line);
+       //free(line);
         return 0;
     }
 

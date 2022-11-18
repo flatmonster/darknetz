@@ -99,18 +99,18 @@ LAYER_TYPE string_to_layer_type(char * type)
 
 void free_section(section *s)
 {
-    free(s->type);
+   //free(s->type);
     node *n = s->options->front;
     while(n){
         kvp *pair = (kvp *)n->val;
-        free(pair->key);
-        free(pair);
+       //free(pair->key);
+       //free(pair);
         node *next = n->next;
-        free(n);
+       //free(n);
         n = next;
     }
-    free(s->options);
-    free(s);
+   //free(s->options);
+   //free(s);
 }
 
 
@@ -1007,12 +1007,12 @@ list *read_cfg(char *filename)
             case '\0':
             case '#':
             case ';':
-                free(line);
+               //free(line);
                 break;
             default:
                 if(!read_option(line, current->options)){
                     fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+                   //free(line);
                 }
                 break;
         }
@@ -1287,7 +1287,7 @@ void save_weights_separate(network *net, char *filename0, int cutoff)
         }
     }
     fclose(fp_ree);
-    free(filename_ree);
+   //free(filename_ree);
 
     // tee weights
     char * filename_tee = concat(filename0, "_tee");
@@ -1310,7 +1310,7 @@ void save_weights_separate(network *net, char *filename0, int cutoff)
         }
     }
     fclose(fp_tee);
-    free(filename_tee);
+   //free(filename_tee);
 }
 
 void save_weights(network *net, char *filename)
@@ -1332,7 +1332,7 @@ void transpose_matrix(float *a, int rows, int cols)
         }
     }
     memcpy(a, transpose, rows*cols*sizeof(float));
-    free(transpose);
+   //free(transpose);
 }
 
 void load_connected_weights(layer l, FILE *fp, int transpose)
@@ -1693,7 +1693,7 @@ void load_weights_separate(network *net, char *filename0, int start, int cutoff)
         }
     }
     fclose(fp_ree);
-    free(filename_ree);
+   //free(filename_ree);
 
     // load tee weights
     char* filename_tee = concat(filename0, "_tee");
@@ -1725,7 +1725,7 @@ void load_weights_separate(network *net, char *filename0, int start, int cutoff)
         }
     }
     fclose(fp_tee);
-    free(filename_tee);
+   //free(filename_tee);
 
     fprintf(stderr, "Done!\n");
 }

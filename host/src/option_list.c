@@ -18,12 +18,12 @@ list *read_data_cfg(char *filename)
             case '\0':
             case '#':
             case ';':
-                free(line);
+               //free(line);
                 break;
             default:
                 if(!read_option(line, options)){
                     fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+                   //free(line);
                 }
                 break;
         }

@@ -32,7 +32,7 @@ void *list_pop(list *l){
     void *val = b->val;
     l->back = b->prev;
     if(l->back) l->back->next = 0;
-    free(b);
+   //free(b);
     --l->size;
 
     return val;
@@ -60,7 +60,7 @@ void free_node(node *n)
 	node *next;
 	while(n) {
 		next = n->next;
-		free(n);
+	//free(n);
 		n = next;
 	}
 }
@@ -68,14 +68,14 @@ void free_node(node *n)
 void free_list(list *l)
 {
 	free_node(l->front);
-	free(l);
+//free(l);
 }
 
 void free_list_contents(list *l)
 {
 	node *n = l->front;
 	while(n){
-		free(n->val);
+	//free(n->val);
 		n = n->next;
 	}
 }

@@ -507,8 +507,8 @@ void normalize_image2(image p)
             p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
-    free(min);
-    free(max);
+   //free(min);
+   //free(max);
 }
 
 void copy_image_into(image src, image dest)
@@ -567,7 +567,7 @@ void save_image_options(image im, const char *name, IMTYPE f, int quality)
     else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
     else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
     else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
-    free(data);
+   //free(data);
     if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
 
@@ -1310,7 +1310,7 @@ image load_image_stb(char *filename, int channels)
             }
         }
     }
-    free(data);
+   //free(data);
     return im;
 }
 
@@ -1461,6 +1461,6 @@ void show_images(image *ims, int n, char *window)
 void free_image(image m)
 {
     if(m.data){
-        free(m.data);
+       //free(m.data);
     }
 }

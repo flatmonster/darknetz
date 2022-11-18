@@ -158,7 +158,7 @@ void forward_iseg_layer(const layer l, network net)
                 printf("\n");
             }
         }
-        free(mse);
+       //free(mse);
 
         // Calculate embedding loss
         for(i = 0; i < 90; ++i){

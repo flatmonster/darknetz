@@ -285,7 +285,7 @@ void validate_coco_recall(char *cfgfile, char *weightfile)
         }
         free_detections(dets, nboxes);
         fprintf(stderr, "%5d %5d %5d\tRPs/Img: %.2f\tIOU: %.2f%%\tRecall:%.2f%%\n", i, correct, total, (float)proposals/(i+1), avg_iou*100/total, 100.*correct/total);
-        free(id);
+       //free(id);
         free_image(orig);
         free_image(sized);
     }

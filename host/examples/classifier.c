@@ -305,7 +305,7 @@ void train_classifier(char *datacfg, char *cfgfile, char *weightfile_o, int *gpu
         if(labels) free_ptrs((void**)labels, classes);
         free_ptrs((void**)paths, plist->size);
         free_list(plist);
-        free(base);
+       //free(base);
 }
 
 
@@ -435,7 +435,7 @@ void validate_classifier_10(char *datacfg, char *filename, char *weightfile)
                 }
                 free_image(im);
                 top_k(pred, classes, topk, indexes);
-                free(pred);
+               //free(pred);
                 if(indexes[0] == class) avg_acc += 1;
                 for(j = 0; j < topk; ++j) {
                         if(indexes[j] == class) avg_topk += 1;
@@ -615,7 +615,7 @@ void validate_classifier_multi(char *datacfg, char *cfg, char *weights)
                 }
                 free_image(im);
                 top_k(pred, classes, topk, indexes);
-                free(pred);
+               //free(pred);
                 if(indexes[0] == class) avg_acc += 1;
                 for(j = 0; j < topk; ++j) {
                         if(indexes[j] == class) avg_topk += 1;
@@ -836,8 +836,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 if(r.data != im.data) free_image(r);
                 free_image(im);
                 if (filename) break;
-                free(net_input_back); // reput from <- ../main.c :642
-                free(net_output_back);
+               //free(net_input_back); // reput from <- ../main.c :642
+               //free(net_output_back);
         }
 }
 

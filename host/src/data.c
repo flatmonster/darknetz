@@ -249,7 +249,7 @@ void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, 
 
         if (id < classes) truth[index+id] = 1;
     }
-    free(boxes);
+   //free(boxes);
 }
 
 void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
@@ -297,7 +297,7 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
         truth[index++] = w;
         truth[index++] = h;
     }
-    free(boxes);
+   //free(boxes);
 }
 
 void load_rle(image im, int *rle, int n)
@@ -392,7 +392,7 @@ void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w
 
         free_image(mask);
         free_image(sized);
-        free(rle);
+       //free(rle);
     }
     if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
@@ -437,7 +437,7 @@ void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w
             ++i;
         }
         free_image(sized);
-        free(rle);
+       //free(rle);
     }
     fclose(file);
     free_image(part);
@@ -483,7 +483,7 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
         truth[(i-sub)*5+3] = h;
         truth[(i-sub)*5+4] = id;
     }
-    free(boxes);
+   //free(boxes);
 }
 
 #define NUMCHARS 37
@@ -524,7 +524,9 @@ data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
     for(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -536,7 +538,9 @@ data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
     d.X = load_image_paths(paths, n, w, h);
     d.X.cols = 17100;
     d.y = d.X;
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -668,8 +672,8 @@ void free_data(data d)
         free_matrix(d.X);
         free_matrix(d.y);
     }else{
-        free(d.X.vals);
-        free(d.y.vals);
+       //free(d.X.vals);
+       //free(d.y.vals);
     }
 }
 
@@ -692,7 +696,7 @@ image get_segmentation_image(char *path, int w, int h, int classes)
         int *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         or_image(part, mask, id);
-        free(rle);
+       //free(rle);
     }
     //exclusive_image(mask);
     fclose(file);
@@ -726,7 +730,7 @@ image get_segmentation_image2(char *path, int w, int h, int classes)
         for(i = 0; i < w*h; ++i){
             if(part.data[i]) mask.data[w*h*classes + i] = 0;
         }
-        free(rle);
+       //free(rle);
     }
     //exclusive_image(mask);
     fclose(file);
@@ -778,7 +782,7 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
            free_image(rgb);
          */
     }
-    free(random_paths);
+   //free(random_paths);
     return d;
 }
 
@@ -818,7 +822,7 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
+   //free(random_paths);
     return d;
 }
 
@@ -858,7 +862,7 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
+   //free(random_paths);
     return d;
 }
 
@@ -912,7 +916,7 @@ data load_data_region(int n, char **paths, int m, int w, int h, int size, int cl
         free_image(orig);
         free_image(cropped);
     }
-    free(random_paths);
+   //free(random_paths);
     return d;
 }
 
@@ -976,7 +980,9 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1083,7 +1089,7 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 
         free_image(orig);
     }
-    free(random_paths);
+   //free(random_paths);
     return d;
 }
 
@@ -1128,7 +1134,7 @@ void *load_thread(void *ptr)
     } else if (a.type == TAG_DATA){
         *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
-    free(ptr);
+   //free(ptr);
     return 0;
 }
 
@@ -1148,7 +1154,7 @@ void *load_threads(void *ptr)
     if (args.threads == 0) args.threads = 1;
     data *out = args.d;
     int total = args.n;
-    free(ptr);
+   //free(ptr);
     data *buffers = calloc(args.threads, sizeof(data));
     pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
     for(i = 0; i < args.threads; ++i){
@@ -1165,8 +1171,8 @@ void *load_threads(void *ptr)
         buffers[i].shallow = 1;
         free_data(buffers[i]);
     }
-    free(buffers);
-    free(threads);
+   //free(buffers);
+   //free(threads);
     return 0;
 }
 
@@ -1194,10 +1200,12 @@ data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int 
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
-    free(replace_paths);
+    for(i = 0; i < n; ++i)//free(replace_paths[i]);
+   //free(replace_paths);
     return d;
 }
 
@@ -1208,7 +1216,9 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1221,7 +1231,7 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    d.shallow = 0;
    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure);
    d.y = load_labels_paths(paths, n, labels, k);
-   if(m) free(paths);
+   if(m)//free(paths);
    return d;
    }
  */
@@ -1252,7 +1262,9 @@ data load_data_super(char **paths, int n, int m, int w, int h, int scale)
         free_image(im);
     }
 
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1263,7 +1275,9 @@ data load_data_regression(char **paths, int n, int m, int k, int min, int max, i
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1346,7 +1360,9 @@ data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *h
     d.h=size;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
     d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1359,7 +1375,9 @@ data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
+    if(m){
+//free(paths);
+    }
     return d;
 }
 
@@ -1415,7 +1433,7 @@ data load_categorical_data_csv(char *filename, int target, int k)
     y.vals = truth;
     d.X = X;
     d.y = y;
-    free(truth_1d);
+   //free(truth_1d);
     return d;
 }
 
@@ -1540,8 +1558,8 @@ data load_go(char *filename)
             X.vals[count][i] = val;
         }
         ++count;
-        free(label);
-        free(board);
+       //free(label);
+       //free(board);
     }
     X = resize_matrix(X, count);
     y = resize_matrix(y, count);

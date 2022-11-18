@@ -41,7 +41,7 @@ void train_cifar(char *cfgfile, char *weightfile)
 
     free_network(net);
     free_ptrs((void**)labels, classes);
-    free(base);
+   //free(base);
     free_data(train);
 }
 
@@ -94,7 +94,7 @@ void train_cifar_distill(char *cfgfile, char *weightfile)
 
     free_network(net);
     free_ptrs((void**)labels, classes);
-    free(base);
+   //free(base);
     free_data(train);
 }
 

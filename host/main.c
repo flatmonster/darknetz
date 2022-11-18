@@ -62,7 +62,7 @@ void debug_plot(char *filename, int num, float *tobeplot, int length)
 
     /* close the file*/
     fclose (fp);
-    free(result);
+   //free(result);
 }
 
 
@@ -569,7 +569,7 @@ void save_weights_CA(float *vec, int length, int layer_i, char type)
          vec[z] = weights_back[z];
     }
 
-    free(weights_back);
+   //free(weights_back);
 
     if (res != TEEC_SUCCESS)
         errx(1, "TEEC_InvokeCommand(SAVE_WEI) failed 0x%x origin 0x%x",
@@ -610,7 +610,7 @@ void forward_network_CA(float *net_input, int l_inputs, int net_batch, int net_t
     errx(1, "TEEC_InvokeCommand(forward) failed 0x%x origin 0x%x",
          res, origin);
 
-    free(params0);
+   //free(params0);
 }
 
 
@@ -642,7 +642,7 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
        l_output[z] = net_input_back[z];
    }
    
-   // free(net_input_back); ////  move to -> ./examples/classifier.c :839
+   ////free(net_input_back); ////  move to -> ./examples/classifier.c :839
 
    /////////  debug_plot  /////////
    if(debug_plot_bool == 1){
@@ -695,8 +695,8 @@ void backward_network_CA(float *net_input, int l_inputs, int net_batch, int net_
        debug_plot("backward_net_input_", sysCount, params0, l_inputs*net_batch);
        //debug_plot("backward_net_delta_", sysCount, params1, l_inputs*net_batch); // zero, removing!
    }
-   free(params0);
-   //free(params1);
+  //free(params0);
+   ///free(params1);
 }
 
 
@@ -725,8 +725,8 @@ void backward_network_CA_addidion(float *l_output, float *l_delta, int net_input
        l_output[z] = net_input_back[z];
        l_delta[z] = net_delta_back[z];
    }
-   free(net_input_back);
-   free(net_delta_back);
+  //free(net_input_back);
+  //free(net_delta_back);
 
 
     /////////  debug_plot  /////////
@@ -778,8 +778,8 @@ void backward_network_back_CA(float *net_input, int l_inputs, int net_batch, flo
     errx(1, "TEEC_InvokeCommand(backward_back) failed 0x%x origin 0x%x",
          res, origin);
 
-   free(params0);
-   free(params1);
+  //free(params0);
+  //free(params1);
 }
 
 
@@ -813,8 +813,8 @@ void backward_network_back_CA_addidion(float *l_output, float *l_delta, int net_
        //l_pp2.delta[z] = net_delta_back[z];
        l_delta[z] = 0.0f;
    }
-   free(net_input_back);
-   //free(net_delta_back);
+  //free(net_input_back);
+   ///free(net_delta_back);
 
    /////////  debug_plot  /////////
    if(debug_plot_bool == 1){
@@ -898,7 +898,7 @@ void net_truth_CA(float *net_truth, int net_truths, int net_batch)
     if(debug_plot_bool == 1){
         debug_plot("backward_net_truth_", sysCount, net_truth, net_truths*net_batch);
     }
-    free(params0);
+   //free(params0);
 }
 
 void calc_network_loss_CA(int n, int batch)

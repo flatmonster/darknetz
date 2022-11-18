@@ -171,7 +171,7 @@ void validate_yolo(char *cfg, char *weights)
             if (nms) do_nms_sort(dets, l.side*l.side*l.n, classes, iou_thresh);
             print_yolo_detections(fps, id, l.side*l.side*l.n, classes, w, h, dets);
             free_detections(dets, nboxes);
-            free(id);
+           //free(id);
             free_image(val[t]);
             free_image(val_resized[t]);
         }
@@ -256,7 +256,7 @@ void validate_yolo_recall(char *cfg, char *weights)
 
         fprintf(stderr, "%5d %5d %5d\tRPs/Img: %.2f\tIOU: %.2f%%\tRecall:%.2f%%\n", i, correct, total, (float)proposals/(i+1), avg_iou*100/total, 100.*correct/total);
         free_detections(dets, nboxes);
-        free(id);
+       //free(id);
         free_image(orig);
         free_image(sized);
     }

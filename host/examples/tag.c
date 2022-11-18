@@ -77,7 +77,7 @@ void train_tag(char *cfgfile, char *weightfile, int clear)
     free_network(net);
     free_ptrs((void**)paths, plist->size);
     free_list(plist);
-    free(base);
+   //free(base);
 }
 
 void test_tag(char *cfgfile, char *weightfile, char *filename)

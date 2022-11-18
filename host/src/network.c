@@ -283,7 +283,7 @@ void forward_network(network *netp)
 
                 // printf("net->output        pointer : %p\n", net->output);
                 l_pp2.outputs = 10;
-                printf("pp2.output: %f, pp.outputs: %d, net.batch: %d\n", l_pp2.output, l_pp2.outputs, net.batch);
+                printf("pp2.output: %f, pp.outputs: %d, net.batch: %d\n", l_pp2.output[0], l_pp2.outputs, net.batch);
                 forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch);
                 
                 // move value NW from TA ???
@@ -617,8 +617,8 @@ int resize_network(network *net, int w, int h)
     net->truths = out.outputs;
     if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
-    free(net->input);
-    free(net->truth);
+   //free(net->input);
+   //free(net->truth);
     net->input = calloc(net->inputs*net->batch, sizeof(float));
     net->truth = calloc(net->truths*net->batch, sizeof(float));
 #ifdef GPU
@@ -631,11 +631,11 @@ int resize_network(network *net, int w, int h)
             net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
         }
     }else {
-        free(net->workspace);
+       //free(net->workspace);
         net->workspace = calloc(1, workspace_size);
     }
 #else
-    free(net->workspace);
+   //free(net->workspace);
     net->workspace = calloc(1, workspace_size);
 #endif
     //fprintf(stderr, " Done!\n");
@@ -820,10 +820,12 @@ void free_detections(detection *dets, int n)
 {
     int i;
     for(i = 0; i < n; ++i){
-        free(dets[i].prob);
-        if(dets[i].mask) free(dets[i].mask);
+       //free(dets[i].prob);
+        if(dets[i].mask){
+//free(dets[i].mask);
+        }
     }
-    free(dets);
+   //free(dets);
 }
 
 float *network_predict_image(network *net, image im)
@@ -859,7 +861,7 @@ matrix network_predict_data_multi(network *net, data test, int n)
             }
         }
     }
-    free(X);
+   //free(X);
     return pred;
 }
 
@@ -882,7 +884,7 @@ matrix network_predict_data(network *net, data test)
             }
         }
     }
-    free(X);
+   //free(X);
     return pred;
 }
 
@@ -969,14 +971,18 @@ void free_network(network *net)
     for(i = 0; i < net->n; ++i){
         free_layer(net->layers[i]);
     }
-    free(net->layers);
-    if(net->input) free(net->input);
-    if(net->truth) free(net->truth);
+   //free(net->layers);
+    if(net->input){
+//free(net->input);
+    }
+    if(net->truth){
+//free(net->truth);
+    }
 #ifdef GPU
     if(net->input_gpu) cuda_free(net->input_gpu);
     if(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
-    free(net);
+   //free(net);
 }
 
 // Some day...
@@ -1107,7 +1113,7 @@ typedef struct {
 void *train_thread(void *ptr)
 {
     train_args args = *(train_args*)ptr;
-    free(ptr);
+   //free(ptr);
     cuda_set_device(args.net->gpu_index);
     *args.err = train_network(args.net, args.d);
     return 0;
@@ -1304,7 +1310,7 @@ void *sync_layer_thread(void *ptr)
 {
     sync_args args = *(sync_args*)ptr;
     sync_layer(args.nets, args.n, args.j);
-    free(ptr);
+   //free(ptr);
     return 0;
 }
 
@@ -1335,7 +1341,7 @@ void sync_nets(network **nets, int n, int interval)
     for (j = 0; j < layers; ++j) {
         pthread_join(threads[j], 0);
     }
-    free(threads);
+   //free(threads);
 }
 
 float train_networks(network **nets, int n, data d, int interval)
@@ -1365,8 +1371,8 @@ float train_networks(network **nets, int n, data d, int interval)
         printf("Done!\n");
     }
     //cudaDeviceSynchronize();
-    free(threads);
-    free(errors);
+   //free(threads);
+   //free(errors);
     return (float)sum/(n);
 }
 
