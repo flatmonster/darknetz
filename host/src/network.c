@@ -260,7 +260,7 @@ void forward_network(network *netp)
         {
             // forward all the others in TEE
             if(debug_summary_com == 1){
-                summary_array("forward_network / net.input", net.input, l.inputs*net.batch);
+                // summary_array("forward_network / net.input", net.input, l.inputs*net.batch);
             }
           
             forward_network_CA(net.input, l.inputs, net.batch, net.train); // ./../main.c
@@ -274,15 +274,24 @@ void forward_network(network *netp)
             // TA からパラメーター (レイヤー partition_point2 の出力) を受け取る
             if(partition_point2 < net.n - 1)
             {
+                printf(" now working layers  : %d \n", i);
+                
                 layer l_pp2 = net.layers[partition_point2];
+                // if(debug_summary_com == 1){
+                //     summary_array("before  forward_network_back / l_pp2.output", l_pp2.output, l_pp2.outputs * net.batch); // ../main.c
+                // }
 
+                // printf("net->output        pointer : %p\n", net->output);
+                l_pp2.outputs = 10;
+                printf("pp2.output: %f, pp.outputs: %d, net.batch: %d\n", l_pp2.output, l_pp2.outputs, net.batch);
                 forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch);
-
+                
+                // move value NW from TA ???
                 net.input = l_pp2.output;
 
-                if(debug_summary_com == 1){
-                    summary_array("forward_network_back / l_pp2.output", l_pp2.output, l_pp2.outputs * net.batch);
-                }
+                // if(debug_summary_com == 1){
+                //     summary_array("after   forward_network_back / l_pp2.output", l_pp2.output, l_pp2.outputs * net.batch); // ../main.c
+                // }
             }
 
         }else // forward in REE
@@ -296,8 +305,7 @@ void forward_network(network *netp)
 
             if(debug_summary_pass == 1){
                 // DEBUGMESSAGE
-                printf("maybe this ?\n");
-                summary_array("forward_network / l.output", l.output, l.inputs*net.batch);
+                // summary_array("forward_network / l.output", l.output, l.inputs*net.batch);
             }
 
             net.input = l.output;

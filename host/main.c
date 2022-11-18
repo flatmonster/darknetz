@@ -71,6 +71,13 @@ void summary_array(char *print_name, float *arr, int n)
 
     float sum=0, min, max, idxzero=0;
 
+    printf("START NUMBER arr*: %p, sum: %f, min: %f, max: %f, idxzero: %f, n: %d\n", &arr, sum, min, max, idxzero, n);
+
+    
+    for(int i=0; i<n; i++){
+      printf("arr[%d] : %f \n", i, arr[i]);
+    }
+
     for(int i=0; i<n; i++)
     {
         sum = sum + arr[i];
@@ -90,7 +97,16 @@ void summary_array(char *print_name, float *arr, int n)
     }
 
     float mean=0;
-    mean = sum / n;
+
+    if (0 == n){
+      n = 1;
+      mean = sum / n;
+    }else{
+      mean = sum / n;
+    }
+
+    printf("if後 debug   arr*: %p, sum: %f, min: %f, max: %f, idxzero: %f, n: %d\n", &arr, sum, min, max, idxzero, n);
+
     printf("%s || mean = %f; min=%f; max=%f; number of zeros=%f \n", print_name, mean, min, max, idxzero);
 }
 
@@ -606,6 +622,9 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
   net_input_back = malloc(sizeof(float) * net_inputs*net_batch);
 
+  for ( int i = 0; i <= net_batch; i++ ){
+    printf("net_input_back[%d]: %f\n", i, net_input_back[i]);
+  }
 
   memset(&op, 0, sizeof(op));
   op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_OUTPUT, TEEC_NONE,
@@ -622,8 +641,8 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
    for(int z=0; z<net_inputs * net_batch; z++){
        l_output[z] = net_input_back[z];
    }
-
-   free(net_input_back);
+   
+   // free(net_input_back); ////  move to -> ./examples/classifier.c :839
 
    /////////  debug_plot  /////////
    if(debug_plot_bool == 1){

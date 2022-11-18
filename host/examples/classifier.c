@@ -836,7 +836,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 if(r.data != im.data) free_image(r);
                 free_image(im);
                 if (filename) break;
-                free(net_output_back); 
+                free(net_input_back); // reput from <- ../main.c :642
+                free(net_output_back);
         }
 }
 
