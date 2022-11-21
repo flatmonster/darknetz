@@ -26,34 +26,34 @@ void getMemory(FILE *output_file) {
         if(file) {
                 while (fscanf(file, " %1023s", buffer) == 1) {
                         if (strcmp(buffer, "VmSize:") == 0) {
-                                fscanf(file, " %d", &vmsize);
-                                printf("vmsize:%ld; ", vmsize);
-                                fprintf(output_file, "vmsize:%ld; ", vmsize);
+                                fscanf(file, " %lu", &vmsize);
+                                printf("vmsize:%lu; ", vmsize);
+                                fprintf(output_file, "vmsize:%lu; ", vmsize);
                         }
                         if (strcmp(buffer, "VmRSS:") == 0) {
-                                fscanf(file, " %d", &vmrss);
-                                printf("vmrss:%ld; ", vmrss);
-                                fprintf(output_file, "vmrss:%ld; ", vmrss);
+                                fscanf(file, " %lu", &vmrss);
+                                printf("vmrss:%lu; ", vmrss);
+                                fprintf(output_file, "vmrss:%lu; ", vmrss);
                         }
                         if (strcmp(buffer, "VmData:") == 0) {
-                                fscanf(file, " %d", &vmdata);
-                                printf("vmdata:%ld; ", vmdata);
-                                fprintf(output_file, "vmdata:%ld; ", vmdata);
+                                fscanf(file, " %lu", &vmdata);
+                                printf("vmdata:%lu; ", vmdata);
+                                fprintf(output_file, "vmdata:%lu; ", vmdata);
                         }
                         if (strcmp(buffer, "VmStk:") == 0) {
-                                fscanf(file, " %d", &vmstk);
-                                printf("vmstk:%ld; ", vmstk);
-                                fprintf(output_file, "vmstk:%ld; ", vmstk);
+                                fscanf(file, " %lu", &vmstk);
+                                printf("vmstk:%lu; ", vmstk);
+                                fprintf(output_file, "vmstk:%lu; ", vmstk);
                         }
                         if (strcmp(buffer, "VmExe:") == 0) {
-                                fscanf(file, " %d", &vmexe);
-                                printf("vmexe:%ld; ", vmexe);
-                                fprintf(output_file, "vmexe:%ld; ", vmexe);
+                                fscanf(file, " %lu", &vmexe);
+                                printf("vmexe:%lu; ", vmexe);
+                                fprintf(output_file, "vmexe:%lu; ", vmexe);
                         }
                         if (strcmp(buffer, "VmLib:") == 0) {
-                                fscanf(file, " %d", &vmlib);
-                                printf("vmlib:%ld\n", vmlib);
-                                fprintf(output_file, "vmlib:%ld\n", vmlib);
+                                fscanf(file, " %lu", &vmlib);
+                                printf("vmlib:%lu\n", vmlib);
+                                fprintf(output_file, "vmlib:%lu\n", vmlib);
                         }
                 }
         }else{
@@ -836,7 +836,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 if(r.data != im.data) free_image(r);
                 free_image(im);
                 if (filename) break;
-                free(net_input_back); // reput from <- ../main.c :642
+                free(net_input_back); // remove from <- ../main.c :642
                 free(net_output_back);
         }
 }
