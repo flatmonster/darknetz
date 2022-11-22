@@ -559,7 +559,8 @@ static TEE_Result forward_network_back_TA_params(uint32_t param_types,
     float *params0 = params[0].memref.buffer;
     int buffersize = params[0].memref.size / sizeof(float);
     for(int z=0; z<buffersize; z++){
-        params0[z] = netta.layers[netta.n-1].output[z];
+        // params0[z] = netta.layers[netta.n-1].output[z];
+        params0[z] = (float)z + 0.0;
     }
 
     // ?????

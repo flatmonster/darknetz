@@ -622,9 +622,12 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
   net_input_back = malloc(sizeof(float) * net_inputs*net_batch);
 
-  for ( int i = 0; i <= net_batch; i++ ){
+  for ( int i = 0; i <= net_inputs * net_batch; i++ ){
     printf("net_input_back[%d]: %f\n", i, net_input_back[i]);
   }
+
+  net_input_back[0] = 0;
+  net_input_back[0] = 1;
 
   memset(&op, 0, sizeof(op));
   op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_OUTPUT, TEEC_NONE,
@@ -634,11 +637,14 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
    op.params[0].tmpref.buffer = net_input_back;
    op.params[0].tmpref.size = sizeof(float) * net_inputs*net_batch;
-
+   
+   printf("did it?\n");
+   // op.params[0] を追っていこう
    res = TEEC_InvokeCommand(&sess, FORWARD_BACK_CMD,
                             &op, &origin);
 
-   for(int z=0; z<net_inputs * net_batch; z++){
+   for(int z=0; z <= net_inputs * net_batch; z++){
+       printf("net_input_back[%d]: %f\n", z, net_input_back[z]);
        l_output[z] = net_input_back[z];
    }
    
@@ -725,7 +731,7 @@ void backward_network_CA_addidion(float *l_output, float *l_delta, int net_input
        l_output[z] = net_input_back[z];
        l_delta[z] = net_delta_back[z];
    }
-   free(net_input_back);
+   // free(net_input_back);
    free(net_delta_back);
 
 
@@ -813,7 +819,7 @@ void backward_network_back_CA_addidion(float *l_output, float *l_delta, int net_
        //l_pp2.delta[z] = net_delta_back[z];
        l_delta[z] = 0.0f;
    }
-   free(net_input_back);
+   // free(net_input_back);
    //free(net_delta_back);
 
    /////////  debug_plot  /////////

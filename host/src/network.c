@@ -282,6 +282,8 @@ void forward_network(network *netp)
                 // }
 
                 // printf("net->output        pointer : %p\n", net->output);
+                
+                // ほわい ちゃいにーず ぷろぐらむ
                 l_pp2.outputs = 10;
                 printf("pp2.output: %f, pp.outputs: %d, net.batch: %d\n", l_pp2.output, l_pp2.outputs, net.batch);
                 forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch);
@@ -320,7 +322,6 @@ void forward_network(network *netp)
 
 
 
-// これをするの？ パラメーターの更新を行います
 void update_network(network *netp)
 {
 #ifdef GPU
@@ -391,7 +392,6 @@ int get_predicted_class_network(network *net)
 
 
 
-// これをするの？ 誤差逆伝播法によりニューラルネットワークの各パラメーターの誤差を計算する。（Backward処理）
 void backward_network(network *netp)
 {
 #ifdef GPU
