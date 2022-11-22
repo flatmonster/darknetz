@@ -69,14 +69,15 @@ void debug_plot(char *filename, int num, float *tobeplot, int length)
 void summary_array(char *print_name, float *arr, int n)
 {
 
-    float sum=0, min, max, idxzero=0;
+    double sum=0.0, min, max;
+    long int idxzero=0;
 
-    printf("START NUMBER arr*: %p, sum: %f, min: %f, max: %f, idxzero: %f, n: %d\n", &arr, sum, min, max, idxzero, n);
+    // printf("START NUMBER arr*: %p, sum: %f, min: %f, max: %f, idxzero: %f, n: %d\n", &arr, sum, min, max, idxzero, n);
 
     
-    for(int i=0; i<n; i++){
-      printf("arr[%d] : %f \n", i, arr[i]);
-    }
+    // for(int i=0; i<n; i++){
+    //   printf("arr[%d] : %f \n", i, arr[i]);
+    // }
 
     for(int i=0; i<n; i++)
     {
@@ -91,12 +92,12 @@ void summary_array(char *print_name, float *arr, int n)
         if (arr[i] > max){
             max = arr[i];
         }
-        if (arr[i] == 0){
+        if (arr[i] == 0.0){
            idxzero++;
         }
     }
 
-    float mean=0;
+    float mean=0.0;
 
     if (0 == n){
       n = 1;
@@ -105,9 +106,8 @@ void summary_array(char *print_name, float *arr, int n)
       mean = sum / n;
     }
 
-    printf("if後 debug   arr*: %p, sum: %f, min: %f, max: %f, idxzero: %f, n: %d\n", &arr, sum, min, max, idxzero, n);
 
-    printf("%s || mean = %f; min=%f; max=%f; number of zeros=%f \n", print_name, mean, min, max, idxzero);
+    printf("%s || mean = %lf; min=%lf; max=%lf; number of zeros=%ld \n", print_name, mean, min, max, idxzero);
 }
 
 
@@ -623,7 +623,9 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
   net_input_back = malloc(sizeof(float) * net_inputs*net_batch);
 
   for ( int i = 0; i < net_inputs * net_batch; i++ ){
+    l_output[i] = 0.0;
     printf("net_input_back[%d]: %f\n", i, net_input_back[i]);
+    printf("l_output[%d]: %f\n", i, l_output[i]);
   }
 
 
@@ -635,6 +637,11 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
    op.params[0].tmpref.buffer = net_input_back;
    op.params[0].tmpref.size = sizeof(float) * net_inputs*net_batch;
+
+   printf("net: %p\n",  &net_input_back);
+   // for(int z=0; z < net_inputs * net_batch; z++){
+       // printf("op[%d]: %f\n", z, op.params[0].tmpref.buffer[z]);
+   // }
    
    printf("did it? in main.c:639\n");
    // op.params[0] を追っていこう
@@ -642,9 +649,11 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
                             &op, &origin);
 
    // DEBUGMESSAGE
+   printf("\n");
    for(int z=0; z < net_inputs * net_batch; z++){
        printf("net_input_back[%d]: %f\n", z, net_input_back[z]);
        l_output[z] = net_input_back[z];
+       printf("l_output[%d]: %f\n", z, l_output[z]);
    }
    
    // free(net_input_back); ////  move to -> ./examples/classifier.c :839
@@ -683,10 +692,12 @@ void backward_network_CA(float *net_input, int l_inputs, int net_batch, int net_
 
     op.params[0].tmpref.buffer = params0; // as lta.output
     op.params[0].tmpref.size = sizeof(float)*l_inputs*net_batch;
-    //op.params[1].tmpref.buffer = params1; // as n_delta
-    //op.params[1].tmpref.size = sizeof(float)*l_inputs*net_batch;
+    // op.params[1].tmpref.buffer = params1; // as n_delta
+    // op.params[1].tmpref.size = sizeof(float)*l_inputs*net_batch;
     //op.params[2].value.a = net_train;
     op.params[1].value.a = net_train;
+    
+    
 
     res = TEEC_InvokeCommand(&sess, BACKWARD_CMD,
                              &op, &origin);
@@ -783,8 +794,8 @@ void backward_network_back_CA(float *net_input, int l_inputs, int net_batch, flo
     errx(1, "TEEC_InvokeCommand(backward_back) failed 0x%x origin 0x%x",
          res, origin);
 
-   free(params0);
-   free(params1);
+   // free(params0);
+   // free(params1);
 }
 
 

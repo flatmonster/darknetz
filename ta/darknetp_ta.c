@@ -557,14 +557,18 @@ static TEE_Result forward_network_back_TA_params(uint32_t param_types,
         return TEE_ERROR_BAD_PARAMETERS;
 
     float *params0 = params[0].memref.buffer;
+    DMSG("memrefsize %u", params[0].memref.size); // 40
     int buffersize = params[0].memref.size / sizeof(float);
+    DMSG("buffersize %d", buffersize); // 10
+    DMSG("value %u", params[0].value.a);
 
     for(int z=0; z<buffersize; z++){
         params0[z] = netta.layers[netta.n-1].output[z];
+        DMSG("params0[%d]: %lf", z, params0[z]);
         // params0[z] = z + 0.0;
     }
 
-    //free(ta_net_input);
+    free(ta_net_input);
     if(debug_summary_com == 1){
         summary_array("forward_network_back / l_pp2.output", netta.layers[netta.n-1].output, buffersize);
     }
