@@ -277,16 +277,10 @@ void forward_network(network *netp)
                 printf(" now working layers  : %d \n", i);
                 
                 layer l_pp2 = net.layers[partition_point2];
-                // if(debug_summary_com == 1){
-                //     summary_array("before  forward_network_back / l_pp2.output", l_pp2.output, l_pp2.outputs * net.batch); // ../main.c
-                // }
-
-                // printf("net->output        pointer : %p\n", net->output);
                 
-                // ほわい ちゃいにーず ぷろぐらむ
-                l_pp2.outputs = 10;
-                printf("pp2.output: %f, pp.outputs: %d, net.batch: %d\n", l_pp2.output, l_pp2.outputs, net.batch);
-                forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch);
+                // DEBUGMESSAGE
+                printf("pp.outputs: %d, net.batch: %d\n", l_pp2.outputs, net.batch);
+                forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch); // ../main.c :617
                 
                 // move value NW from TA ???
                 net.input = l_pp2.output;

@@ -622,12 +622,10 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
   net_input_back = malloc(sizeof(float) * net_inputs*net_batch);
 
-  for ( int i = 0; i <= net_inputs * net_batch; i++ ){
+  for ( int i = 0; i < net_inputs * net_batch; i++ ){
     printf("net_input_back[%d]: %f\n", i, net_input_back[i]);
   }
 
-  net_input_back[0] = 0;
-  net_input_back[0] = 1;
 
   memset(&op, 0, sizeof(op));
   op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_OUTPUT, TEEC_NONE,
@@ -638,12 +636,13 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
    op.params[0].tmpref.buffer = net_input_back;
    op.params[0].tmpref.size = sizeof(float) * net_inputs*net_batch;
    
-   printf("did it?\n");
+   printf("did it? in main.c:639\n");
    // op.params[0] を追っていこう
    res = TEEC_InvokeCommand(&sess, FORWARD_BACK_CMD,
                             &op, &origin);
 
-   for(int z=0; z <= net_inputs * net_batch; z++){
+   // DEBUGMESSAGE
+   for(int z=0; z < net_inputs * net_batch; z++){
        printf("net_input_back[%d]: %f\n", z, net_input_back[z]);
        l_output[z] = net_input_back[z];
    }
@@ -941,7 +940,7 @@ void net_output_return_CA(int net_outputs, int net_batch)
     uint32_t origin;
     TEEC_Result res;
 
-    printf("did it?\n");
+    // printf("did it?\n");
 
     net_output_back = malloc(sizeof(float) * net_outputs * net_batch);
     printf("outputs: %d, net_batch: %d \n", net_outputs, net_batch);
