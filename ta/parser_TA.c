@@ -43,6 +43,7 @@ void aes_cbc_TA(char* xcrypt, float* gradient, int org_len)
     //convert uint8_t to float one by one
     for(int z = 0; z < org_len; z++){
         gradient[z] = *(float*)(&array[z*4]);
+        // gradient[z] = *(float*)(&array[z*4]);
     }
 }
 
@@ -68,25 +69,41 @@ void load_weights_TA(float *vec, int length, int layer_i, char type, int transpo
     aes_cbc_TA("decrypt", tempvec, length);
 
     // copy
-    layer_TA l = netta.layers[layer_i];
+    // layer_TA l = netta.layers[layer_i];
+    layer_TA* l = &(netta.layers[layer_i]);
 
     if(type == 'b'){
-        copy_cpu_TA(length, tempvec, 1, l.biases, 1);
+        // copy_cpu_TA(length, tempvec, 1, l.biases, 1);
+        copy_cpu_TA(length, tempvec, 1, l->biases, 1);
     }
     else if(type == 'w'){
-        copy_cpu_TA(length, tempvec, 1, l.weights, 1);
+        // copy_cpu_TA(length, tempvec, 1, l.weights, 1);
+        copy_cpu_TA(length, tempvec, 1, l->weights, 1);
     }
     else if(type == 's'){
-        copy_cpu_TA(length, tempvec, 1, l.scales, 1);
+        // copy_cpu_TA(length, tempvec, 1, l.scales, 1);
+        copy_cpu_TA(length, tempvec, 1, l->scales, 1);
     }
     else if(type == 'm'){
-        copy_cpu_TA(length, tempvec, 1, l.rolling_mean, 1);
+        // copy_cpu_TA(length, tempvec, 1, l.rolling_mean, 1);
+        copy_cpu_TA(length, tempvec, 1, l->rolling_mean, 1);
     }
     else if(type == 'v'){
-        copy_cpu_TA(length, tempvec, 1, l.rolling_variance, 1);
+        // copy_cpu_TA(length, tempvec, 1, l.rolling_variance, 1);
+        copy_cpu_TA(length, tempvec, 1, l->rolling_variance, 1);
     }
 
-
+    if(l->type == CONVOLUTIONAL_TA || l->type == DECONVOLUTIONAL_TA){
+        if(l->flipped && type == 'w'){
+            transpose_matrix_TA(l->weights, l->c*l->size*l->size, l->n);
+        }
+    }
+    else if(l->type == CONNECTED_TA){
+        if(transpose && type == 'w'){
+            transpose_matrix_TA(l->weights, l->inputs, l->outputs);
+        }
+    }
+    /*
     if(l.type == CONVOLUTIONAL_TA || l.type == DECONVOLUTIONAL_TA){
         if(l.flipped && type == 'w'){
             transpose_matrix_TA(l.weights, l.c*l.size*l.size, l.n);
@@ -97,7 +114,7 @@ void load_weights_TA(float *vec, int length, int layer_i, char type, int transpo
             transpose_matrix_TA(l.weights, l.inputs, l.outputs);
         }
     }
-
+    */
     free(tempvec);
 }
 

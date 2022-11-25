@@ -1361,6 +1361,7 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
 void load_connected_weights_comm(layer l, FILE *fp, int i, int transpose)
 {
+    printf("wefwefwefweafijawofjaerogjaerion\n");
     fread(l.biases, sizeof(float), l.outputs, fp);
     fread(l.weights, sizeof(float), l.outputs*l.inputs, fp);
 

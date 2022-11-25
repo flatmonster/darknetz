@@ -622,10 +622,12 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
   net_input_back = malloc(sizeof(float) * net_inputs*net_batch);
 
+
+  // debug
   for ( int i = 0; i < net_inputs * net_batch; i++ ){
-    l_output[i] = 0.0;
+    net_input_back[i] = 0.0;
     printf("net_input_back[%d]: %f\n", i, net_input_back[i]);
-    printf("l_output[%d]: %f\n", i, l_output[i]);
+    printf("net_input_back[%d]: %x\n", i, net_input_back[i]);
   }
 
 
@@ -635,25 +637,23 @@ void forward_network_back_CA(float *l_output, int net_inputs, int net_batch)
 
 
 
-   op.params[0].tmpref.buffer = net_input_back;
-   op.params[0].tmpref.size = sizeof(float) * net_inputs*net_batch;
+   printf("net_input_back addr: %p\n",  net_input_back);
+   op.params[0].tmpref.buffer = net_input_back; //tmpref(teec_tempmemoryreference型), buffer(void*型)
+   op.params[0].tmpref.size = sizeof(float) * net_inputs*net_batch; //tmpref(teec_tempmemoryreference型), size(saize_t型)
 
-   printf("net: %p\n",  &net_input_back);
-   // for(int z=0; z < net_inputs * net_batch; z++){
-       // printf("op[%d]: %f\n", z, op.params[0].tmpref.buffer[z]);
-   // }
    
    printf("did it? in main.c:639\n");
    // op.params[0] を追っていこう
    res = TEEC_InvokeCommand(&sess, FORWARD_BACK_CMD,
-                            &op, &origin);
+                            &op, &origin); // ../ta/darknetp_ta.c:942
 
    // DEBUGMESSAGE
    printf("\n");
    for(int z=0; z < net_inputs * net_batch; z++){
        printf("net_input_back[%d]: %f\n", z, net_input_back[z]);
+       printf("net_input_back[%d]: %x\n", z, net_input_back[z]);
        l_output[z] = net_input_back[z];
-       printf("l_output[%d]: %f\n", z, l_output[z]);
+       // printf("l_output[%d]: %f\n", z, l_output[z]);
    }
    
    // free(net_input_back); ////  move to -> ./examples/classifier.c :839

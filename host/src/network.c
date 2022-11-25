@@ -281,7 +281,7 @@ void forward_network(network *netp)
                 // DEBUGMESSAGE
                 // ここ
                 printf("pp.outputs: %d, net.batch: %d\n", l_pp2.outputs, net.batch);
-                forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch); // ../main.c :617
+                forward_network_back_CA(l_pp2.output, l_pp2.outputs, net.batch); // ../main.c:617
                 
                 // move value NW from TA ???
                 net.input = l_pp2.output;

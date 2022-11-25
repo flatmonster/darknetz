@@ -556,13 +556,21 @@ static TEE_Result forward_network_back_TA_params(uint32_t param_types,
     if (param_types != exp_param_types)
         return TEE_ERROR_BAD_PARAMETERS;
 
+    // debug
+    //  for ( int i = 0; i < 10; i++ ){
+    //    DMSG("net_input_back[%d]: %f", i, ((float*)(params[0].memref.buffer))[i]);
+    //  }
+ 
+
+    // DMSG("memrefsize %u", params[0].memref.size); // 40
     float *params0 = params[0].memref.buffer;
-    DMSG("memrefsize %u", params[0].memref.size); // 40
+    // DMSG("params0 %p", params0); // 40
     int buffersize = params[0].memref.size / sizeof(float);
-    DMSG("buffersize %d", buffersize); // 10
-    DMSG("value %u", params[0].value.a);
+    // DMSG("buffersize %d", buffersize); // 10
 
     for(int z=0; z<buffersize; z++){
+        // brows netta
+        // when use only 8 layer and 9 layer with TA, ^ outputs is equal
         params0[z] = netta.layers[netta.n-1].output[z];
         DMSG("params0[%d]: %lf", z, params0[z]);
         // params0[z] = z + 0.0;
@@ -617,7 +625,7 @@ static TEE_Result backward_network_TA_params(uint32_t param_types,
                                                TEE_PARAM_TYPE_NONE);
     //TEE_PARAM_TYPE_VALUE_INPUT
 
-    //DMSG("has been called");
+    DMSG("has been called");
 
     if (param_types != exp_param_types)
     return TEE_ERROR_BAD_PARAMETERS;
@@ -630,10 +638,9 @@ static TEE_Result backward_network_TA_params(uint32_t param_types,
 
     if(debug_summary_com == 1){
         summary_array("backward_network / l_pp1.output", params0, params[0].memref.size / sizeof(float));
-        //summary_array("backward_network / l_pp1.delta", params1, params[1].memref.size / sizeof(float));
     }
-    //backward_network_TA(params0, params1); //zeros, removing
-    backward_network_TA(params0);
+    // backward_network_TA(params0, params1); //zeros, removing
+    backward_network_TA(params0); // ./darknetp_ta.c:169
 
     return TEE_SUCCESS;
 }
