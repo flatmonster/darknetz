@@ -12,9 +12,16 @@ extern int debug_summary_pass;
  * This UUID is generated with uuidgen
  * the ITU-T UUID generator at http://www.itu.int/ITU-T/asn1/uuid.html
  */
+
+/*
 #define TA_DARKNETP_UUID \
 	{ 0x7fc5c039, 0x0542, 0x4ee1, \
 		{ 0x80, 0xaf, 0xb4, 0xea, 0xb2, 0xf1, 0x99, 0x8d} }
+*/
+
+#define TA_DARKNETP_UUID \
+{ 0xb8b5b63f, 0x8975, 0x43f8,\
+  {0xa7, 0xae, 0x3e, 0xca, 0x05, 0x9b, 0xb7, 0x3c} }
 
 /* The function IDs implemented in this TA */
 #define MAKE_NETWORK_CMD 1
