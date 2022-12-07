@@ -122,5 +122,5 @@ void save_weights_TA(float *weights_encrypted, int length, int layer_i, char typ
     }
 
     // remove the on-device encryption for FL
-    aes_cbc_TA("encrypt", weights_encrypted, length);
+    // aes_cbc_TA("encrypt", weights_encrypted, length);
 }
