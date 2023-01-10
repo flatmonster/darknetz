@@ -10,6 +10,11 @@
 #include "math_TA.h"
 #include "aes_TA.h"
 
+// #include <time.h>
+// #include <kernel/tee_time.h>
+// #include <kernel/time.h>
+// #include <kernel/time_source.h>
+
 void aes_cbc_TA(char* xcrypt, float* gradient, int org_len)
 {
     IMSG("aes_cbc_TA %s ing\n", xcrypt);
@@ -65,7 +70,34 @@ void load_weights_TA(float *vec, int length, int layer_i, char type, int transpo
     // decrypt
     float *tempvec = malloc(length*sizeof(float));
     copy_cpu_TA(length, vec, 1, tempvec, 1);
+
+    
+    
+    // uint64_t tm = read_time();
+    // show exec time ----------------------------------
+    // time=clock();
+
     aes_cbc_TA("decrypt", tempvec, length);
+
+    // etime=clock();
+    // show exec time ----------------------------------
+    // output file
+    // struct stat st = {0};
+    // if (stat("/media/results", &st) == -1) {
+    //         mkdir("/media/results", 0700);
+    // }
+
+    // char *output_dir[80];
+    // strcpy(output_dir, "/media/results/predict_decrypt.txt");
+
+    // // printf("output file: %s\n", output_dir);
+    // #include "tomcrypt_private.h"
+    // FILE *output_file = fopen(output_dir, "a");
+
+    // fprintf(output_file, "\n\ndecrypt in %f seconds.\n", input, sec(etime-time));
+
+
+
 
     // copy
     layer_TA l = netta.layers[layer_i];
