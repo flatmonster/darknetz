@@ -722,6 +722,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
         int i = 0;
         char **names = get_labels(name_list);
         clock_t time;
+        clock_t etime;
         int *indexes = calloc(top, sizeof(int));
         char buff[256];
         char *input = buff;
@@ -744,19 +745,40 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 float *X = r.data;
 
+
+                struct rusage usage uasgee;
+                struct timeval startu, endu, starts, ends;
+
+                // show exe time  -------------------------------------------
                 time=clock();
+                getrusage(RUSAGE_SELF, &usage);
+
+
                 float *predictions = network_predict(net, X);
+
+                getrusage(RUSAGE_SELF, &usagee);
+                etime=clock();
+                // show exe time  -------------------------------------------
+                startu = usage.ru_utime;
+                starts = usage.ru_stime;
+                endu = usagee.ru_utime;
+                ends = usagee.ru_stime;
+
+
+                printf("%s: Predicted in %f seconds.\n", input, sec(etime-time));
+                fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(etime-time));
+                fprintf(output_file, "user CPU start: %lu.%08u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                fprintf(output_file, "kernel CPU start: %lu.%08u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
+                printf("user CPU start: %lu.%06u; end: %lu.%08u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                printf("kernel CPU start: %lu.%06u; end: %lu.%08u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
+
+
                 if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
 
                 top_k(predictions, net->outputs, top, indexes);
 
 
-                struct rusage usage;
-                struct timeval startu, endu, starts, ends;
 
-                getrusage(RUSAGE_SELF, &usage);
-                startu = usage.ru_utime;
-                starts = usage.ru_stime;
 
                 // output file
                 struct stat st = {0};
@@ -785,8 +807,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 printf("output file: %s\n", output_dir);
                 FILE *output_file = fopen(output_dir, "a");
 
-                fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
-                fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
+                // fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
+                // fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
 
                 for(i = 0; i < top; ++i) {
                         int index = indexes[i];
@@ -797,15 +819,12 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
 
 
-                getrusage(RUSAGE_SELF, &usage);
-                endu = usage.ru_utime;
-                ends = usage.ru_stime;
                 printf("user CPU start: %lu.%06u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
                 printf("kernel CPU start: %lu.%06u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
-                printf("Max: %ld  kilobytes\n", usage.ru_maxrss);
-                fprintf(output_file, "user CPU start: %lu.%06u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
-                fprintf(output_file, "kernel CPU start: %lu.%06u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
-                fprintf(output_file, "Max: %ld  kilobytes\n", usage.ru_maxrss);
+                // printf("Max: %ld  kilobytes\n", usage.ru_maxrss);
+                // fprintf(output_file, "user CPU start: %lu.%06u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                // fprintf(output_file, "kernel CPU start: %lu.%06u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
+                // fprintf(output_file, "Max: %ld  kilobytes\n", usage.ru_maxrss);
                 getMemory(output_file);
 
                 fclose(output_file);
