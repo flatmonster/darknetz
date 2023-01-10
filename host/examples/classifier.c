@@ -775,6 +775,12 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 top_k(predictions, net->outputs, top, indexes);
 
 
+                // struct rusage usage;
+                // struct timeval startu, endu, starts, ends;
+
+                // getrusage(RUSAGE_SELF, &usage);
+                // startu = usage.ru_utime;
+                // starts = usage.ru_stime;
 
 
                 // output file
@@ -820,6 +826,9 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
 
 
+                // getrusage(RUSAGE_SELF, &usage);
+                // endu = usage.ru_utime;
+                // ends = usage.ru_stime;
                 printf("user CPU start: %lu.%06u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
                 printf("kernel CPU start: %lu.%06u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
                 // printf("Max: %ld  kilobytes\n", usage.ru_maxrss);
