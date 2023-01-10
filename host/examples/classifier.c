@@ -746,7 +746,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 float *X = r.data;
 
 
-                struct rusage usage uasgee;
+                struct rusage usage, usagee;
                 struct timeval startu, endu, starts, ends;
 
                 // show exe time  -------------------------------------------
@@ -765,12 +765,9 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 ends = usagee.ru_stime;
 
 
-                printf("%s: Predicted in %f seconds.\n", input, sec(etime-time));
-                fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(etime-time));
-                fprintf(output_file, "user CPU start: %lu.%08u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
-                fprintf(output_file, "kernel CPU start: %lu.%08u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
-                printf("user CPU start: %lu.%06u; end: %lu.%08u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
-                printf("kernel CPU start: %lu.%06u; end: %lu.%08u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
+                printf("(clock)%s: Predicted in %f seconds.\n", input, sec(etime-time));
+                printf("(ru_utime)user CPU start: %lu.%06u; end: %lu.%08u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                printf("(ru_stime)kernel CPU start: %lu.%06u; end: %lu.%08u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
 
 
                 if(net->hierarchy) hierarchy_predictions(predictions, net->outputs, net->hierarchy, 1, 1);
@@ -806,6 +803,10 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 printf("output file: %s\n", output_dir);
                 FILE *output_file = fopen(output_dir, "a");
+
+                fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(etime-time));
+                fprintf(output_file, "user CPU start: %lu.%08u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                fprintf(output_file, "kernel CPU start: %lu.%08u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
 
                 // fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
                 // fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
