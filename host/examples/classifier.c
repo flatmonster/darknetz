@@ -52,7 +52,7 @@ void getMemory(FILE *output_file) {
                         }
                         if (strcmp(buffer, "VmLib:") == 0) {
                                 fscanf(file, " %lu", &vmlib);
-                                printf("vmlib:%lu\n", vmlib);
+                                printf("vmlib:%lu\n\n", vmlib);
                                 fprintf(output_file, "vmlib:%lu\n", vmlib);
                         }
                 }

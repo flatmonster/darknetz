@@ -37,6 +37,8 @@
 #include "lstm_layer.h"
 #include "utils.h"
 
+#include <sys/stat.h>
+
 #include "main.h"
 
 
@@ -951,6 +953,27 @@ network *parse_network_cfg(char *filename)
 #endif
     if(workspace_size){
         printf("workspace_size=%ld\n", workspace_size);
+
+        // write workspace
+        struct stat st = {0};
+        if (stat("/media/results", &st) == -1) {
+                mkdir("/media/results", 0700);
+        }
+        char pp_str_start[5];
+        sprintf(pp_str_start, "%d", partition_point1 + 1);
+        char pp_str_end[5];
+        sprintf(pp_str_end, "%d", partition_point2);
+        char *output_dir[80];
+        strcpy(output_dir, "/media/results/predict_lenet");
+        strcat(output_dir, "_pps");
+        strcat(output_dir, pp_str_start);
+        strcat(output_dir, "_ppe");
+        strcat(output_dir, pp_str_end);
+        strcat(output_dir, ".txt");
+        FILE *output_file = fopen(output_dir, "a");
+        fprintf(output_file, "orkspace_size=%ld\n", workspace_size);
+
+
 #ifdef GPU
         if(gpu_index >= 0){
             net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
