@@ -708,7 +708,19 @@ void try_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filena
 
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
 {
+        clock_t ntime;
+        clock_t netime;
+        // show exec time  -------------------------------------------
+        printf("time check start(network conf)\n");
+        ntime=clock();
+
         network *net = load_network(cfgfile, weightfile, 0);
+
+        netime=clock();
+        printf("time check end(network conf)\n");
+        // show exec time  -------------------------------------------
+
+
         set_batch_network(net, 1);
 
         srand(2222222);
@@ -749,7 +761,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 struct rusage usage, usagee;
                 struct timeval startu, endu, starts, ends;
 
-                // show exe time  -------------------------------------------
+                // show exec time  -------------------------------------------
+                printf("time check start(predict)\n");
                 time=clock();
                 getrusage(RUSAGE_SELF, &usage);
 
@@ -758,7 +771,8 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
 
                 getrusage(RUSAGE_SELF, &usagee);
                 etime=clock();
-                // show exe time  -------------------------------------------
+                printf("time check end(predict)\n");
+                // show exec time  -------------------------------------------
                 startu = usage.ru_utime;
                 starts = usage.ru_stime;
                 endu = usagee.ru_utime;
@@ -810,9 +824,13 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 printf("output file: %s\n", output_dir);
                 FILE *output_file = fopen(output_dir, "a");
 
+
+
+                fprintf(output_file, "%s read network conf %f\n", input, sec(netime-ntime));
+
                 fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(etime-time));
-                fprintf(output_file, "user CPU start: %lu.%08u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
-                fprintf(output_file, "kernel CPU start: %lu.%08u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
+                // fprintf(output_file, "user CPU start: %lu.%08u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
+                // fprintf(output_file, "kernel CPU start: %lu.%08u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
 
                 // fprintf(stderr, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
                 // fprintf(output_file, "%s: Predicted in %f seconds.\n", input, sec(clock()-time));
@@ -835,7 +853,7 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 // fprintf(output_file, "user CPU start: %lu.%06u; end: %lu.%06u\n", startu.tv_sec, startu.tv_usec, endu.tv_sec, endu.tv_usec);
                 // fprintf(output_file, "kernel CPU start: %lu.%06u; end: %lu.%06u\n", starts.tv_sec, starts.tv_usec, ends.tv_sec, ends.tv_usec);
                 // fprintf(output_file, "Max: %ld  kilobytes\n", usage.ru_maxrss);
-                getMemory(output_file);
+                // getMemory(output_file);
 
                 fclose(output_file);
 

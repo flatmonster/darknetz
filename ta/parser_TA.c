@@ -74,8 +74,8 @@ void load_weights_TA(float *vec, int length, int layer_i, char type, int transpo
     
     
     // uint64_t tm = read_time();
-    // show exec time ----------------------------------
-    // time=clock();
+    // int64_t time = time(NULL);
+    // show exec time -- i cant it --------------------------------
 
     aes_cbc_TA("decrypt", tempvec, length);
 

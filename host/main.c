@@ -15,6 +15,25 @@
 /* OP-TEE TEE client API (built by optee_client) */
 #include <tee_client_api.h>
 
+
+#include "darknet.h"
+#include "main.h"
+#include "parser.h"
+
+#include <sys/time.h>
+#include <assert.h>
+#include <sys/resource.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <sys/time.h>
+#include <sys/resource.h>
+
+
 /* TEE resources */
 TEEC_Context ctx;
 TEEC_Session sess;
@@ -494,8 +513,41 @@ void transfer_weights_CA(float *vec, int length, int layer_i, char type, int add
 
     op.params[2].value.a = type;
 
+    clock_t time;
+    clock_t etime;
+    struct rusage usage, usagee;
+    struct timeval startu, endu, starts, ends;
+    // show exec time  -------------------------------------------
+    printf("time check start(load_weight) layer:%d\n", layer_i);
+    time=clock();
+
     res = TEEC_InvokeCommand(&sess, TRANS_WEI_CMD,
                              &op, &origin);
+
+    etime=clock();
+    printf("time check   end(load_weight) layer:%d\n", layer_i);
+    // show exec time  -------------------------------------------
+    startu = usage.ru_utime;
+    starts = usage.ru_stime;
+    endu = usagee.ru_utime;
+    ends = usagee.ru_stime;
+
+    printf("(clock)           load_weight %f seconds.\n", sec(etime-time));
+
+
+    char *output_dir[80];
+    strcpy(output_dir, "/media/results/predict_");
+    strcat(output_dir, "load_weight");
+    strcat(output_dir, ".txt");
+
+    printf("loadweight output file: %s\n", output_dir);
+    FILE *output_file = fopen(output_dir, "a");
+
+
+
+    fprintf(output_file, "layer:%d (clock)load_weight %f seconds.\n", layer_i, sec(etime-time));
+
+
     if (res != TEEC_SUCCESS)
         errx(1, "TEEC_InvokeCommand(TRANS_WEI) failed 0x%x origin 0x%x",
              res, origin);
@@ -959,5 +1011,7 @@ int main(int argc, char **argv)
     darknet_main(argc, argv);
 
     terminate_tee_session();
+
+
     return 0;
 }
